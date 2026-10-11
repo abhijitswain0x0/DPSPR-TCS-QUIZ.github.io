@@ -238,7 +238,7 @@ addEventListener('scroll',mark,{passive:true});mark()})();
 
 </script><dialog id="am"><form method="dialog" id="amf" novalidate><h3>Add material</h3><p class="hint">Photos, PDFs or documents. Needs the class password. It goes live in the list right away.</p>
 <label for="amn">Name of submitter</label><input id="amn" type="text" autocomplete="name" maxlength="60" required>
-<label>File</label><label class="drop" for="amfile"><span id="amdrop">Tap to choose a photo or file<br><small>Images, PDF, Word, PowerPoint, text. Up to 10 MB.</small></span></label><input id="amfile" type="file" accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.txt" required>
+<label>Files</label><label class="drop" for="amfile"><span id="amdrop">Tap to choose photos or files<br><small>Images, PDF, Word, PowerPoint, text. Up to 10 files, 10 MB each, 30 MB total.</small></span></label><input id="amfile" type="file" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.txt" required>
 <label for="amp">Password</label><input id="amp" type="password" autocomplete="off" required>
 <div class="msg" id="ammsg" role="status"></div>
 <div class="acts"><button type="button" id="amcancel">Cancel</button><button type="submit" class="go" id="amgo">Upload</button></div></form></dialog>
@@ -247,11 +247,19 @@ addEventListener('scroll',mark,{passive:true});mark()})();
 const OK=/\.(png|jpe?g|heic|webp|gif|pdf|docx?|pptx?|txt)$/i,MAX=10*1024*1024;
 document.getElementById('addbtn').onclick=()=>{m.textContent='';m.className='msg';d.showModal()};document.getElementById('amcancel').onclick=()=>d.close();
 d.addEventListener('click',e=>{if(e.target===d)d.close()});
-fi.onchange=()=>{document.getElementById('amdrop').innerHTML=fi.files[0]?'<b>'+fi.files[0].name.replace(/[<>&]/g,'')+'</b>':'Tap to choose a photo or file'};
+fi.onchange=()=>{const a=[...fi.files];document.getElementById('amdrop').innerHTML=a.length?'<b>'+a.map(x=>x.name.replace(/[<>&]/g,'')).join('<br>')+'</b>':'Tap to choose photos or files'};
 function say(t,c){m.textContent=t;m.className='msg '+(c||'')}
-f.addEventListener('submit',async e=>{e.preventDefault();const n=document.getElementById('amn').value.trim(),p=document.getElementById('amp').value,file=fi.files[0];
-if(!n)return say('Enter your name.','err');if(!file)return say('Choose a file.','err');if(!OK.test(file.name))return say('That file type is not allowed.','err');if(file.size>MAX)return say('File is over 10 MB.','err');if(!p)return say('Enter the password.','err');
-go.disabled=true;say('Uploading...');const fd=new FormData();fd.append('name',n);fd.append('password',p);fd.append('file',file);
+const MAXN=10,TOT=30*1024*1024;
+f.addEventListener('submit',async e=>{e.preventDefault();const n=document.getElementById('amn').value.trim(),p=document.getElementById('amp').value,files=[...fi.files];
+if(!n)return say('Enter your name.','err');if(!files.length)return say('Choose at least one file.','err');if(files.length>MAXN)return say('Up to '+MAXN+' files at a time.','err');
+const bad=files.find(x=>!OK.test(x.name));if(bad)return say(bad.name+': file type not allowed.','err');const big=files.find(x=>x.size>MAX);if(big)return say(big.name+' is over 10 MB.','err');
+if(files.reduce((s,x)=>s+x.size,0)>TOT)return say('Total is over 30 MB. Upload in smaller batches.','err');if(!p)return say('Enter the password.','err');
+go.disabled=true;let done=0;const fails=[];
+for(const file of files){say('Uploading '+(done+fails.length+1)+' of '+files.length+'...');const fd=new FormData();fd.append('name',n);fd.append('password',p);fd.append('file',file);
 try{const r=await fetch(ENDPOINT,{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
-if(r.status===401)say('Wrong password. Nothing was uploaded.','err');else if(r.ok){say('Uploaded. It is in the list now.','ok');if(window.libAdd)window.libAdd({id:j.id,name:n,file:file.name,ts:Date.now()});f.reset();document.getElementById('amdrop').textContent='Tap to choose a photo or file';setTimeout(()=>d.close(),1800)}else say(j.error||'Upload failed. Try again.','err')}catch(x){say('No connection. Try again.','err')}go.disabled=false})})();
+if(r.status===401){say(done?'Wrong password. '+done+' uploaded before that.':'Wrong password. Nothing was uploaded.','err');go.disabled=false;return}
+if(r.ok){done++;if(window.libAdd)window.libAdd({id:j.id,name:n,file:file.name,ts:Date.now()})}else fails.push(file.name+': '+(j.error||'failed'))}catch(x){fails.push(file.name+': no connection')}}
+go.disabled=false;
+if(fails.length)return say((done?done+' uploaded. ':'')+'Failed: '+fails.join('; '),'err');
+say(done===1?'Uploaded. It is in the list now.':done+' files uploaded. They are in the list now.','ok');f.reset();document.getElementById('amdrop').textContent='Tap to choose photos or files';setTimeout(()=>d.close(),1800)})})();
 </script></body></html>
