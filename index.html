@@ -76,6 +76,15 @@ h2{font-size:1.1rem;letter-spacing:0}summary h2{font-size:1.05rem}.bar{backgroun
 
 .note a,.sub a{display:inline;padding:2px 0}
 @media(max-width:560px){.snav{margin:4px -16px 0;padding:0 8px}#recsec nav{margin:0 -16px;top:calc(88px + env(safe-area-inset-top))}section>details.sec>.body{padding:12px 14px 14px}}
+
+.sbar{display:flex;gap:8px;align-items:flex-end}.sbar input{margin-top:0!important;flex:1}.icbtn{flex:0 0 44px;height:44px;border:1px solid var(--bd);border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center;cursor:pointer}
+dialog#am{border:1px solid var(--bd);border-radius:14px;background:var(--card);color:var(--fg);padding:0;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}dialog#am::backdrop{background:rgba(0,0,0,.45)}
+#am form{padding:18px 16px calc(16px + env(safe-area-inset-bottom))}#am h3{margin:0 0 4px;font-size:1.1rem}#am .hint{color:var(--mut);font-size:.9rem;margin:0 0 14px}
+#am label{display:block;font-size:.85rem;font-weight:600;margin:12px 0 5px}#am input[type=text],#am input[type=password]{width:100%;font:inherit;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:transparent;color:var(--fg);min-height:44px}
+#am .drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px;border:1px dashed var(--mut);border-radius:10px;text-align:center;cursor:pointer;color:var(--mut);font-size:.92rem}#am .drop b{color:var(--fg);font-weight:600;word-break:break-all}#am input[type=file]{position:absolute;opacity:0;width:1px;height:1px}
+#am .acts{display:flex;gap:8px;margin-top:16px}#am .acts button{flex:1;min-height:44px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--bd);background:none;color:var(--fg)}#am .acts button.go{background:var(--acc);border-color:var(--acc);color:#fff}#am .acts button:disabled{opacity:.5;cursor:default}
+#am .msg{min-height:1.3em;margin-top:10px;font-size:.9rem}#am .msg.err{color:#d93025}#am .msg.ok{color:#1f8a3b}
+@media(max-width:560px){dialog#am{margin:auto auto 0;width:100%;max-width:none;border-radius:14px 14px 0 0;border-bottom:0}}
 </style></head><body><header class="top"><div class="in"><div class="brand">TCS InQuizitive Study Hub <span>Unofficial, by students</span></div><div class="snav" id="snav"><a href="#quiz">Practice</a><a href="#tests">Tests</a><a href="#notesec">Material</a><a href="#guide">Study</a><a href="#rules">Rules</a><a href="#recsec">Recordings</a></div></div></header>
 <main>
 <section id="quiz"><details class="sec" open><summary><h2>1. Practice quiz</h2></summary><div class="body">
@@ -87,7 +96,7 @@ h2{font-size:1.1rem;letter-spacing:0}summary h2{font-size:1.05rem}.bar{backgroun
 <div class="tabs" id="tests-tabs"></div><div class="qwrap" id="tz"></div></div></details></section>
 <section id="notesec"><details class="sec" open><summary><h2>3. Additional Material <span class="tag">Our own</span></h2></summary><div class="body">
 <p class="note">Five short study notes. Search, filter by subject, then read a note here or download it as a PDF. Our own summaries, not from TCS.</p>
-<div class="lib"><input id="lq" type="search" placeholder="Search notes" aria-label="Search notes"><div class="tabs" id="lchips"></div>
+<div class="lib"><div class="sbar"><input id="lq" type="search" placeholder="Search notes" aria-label="Search notes"><button type="button" class="icbtn" id="addbtn" aria-label="Add material" title="Add material"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="tabs" id="lchips"></div>
 <div class="lbar"><span id="lcount" class="note"></span><label class="note">Sort <select id="lsort"><option value="new">Newest</option><option value="az">A to Z</option></select></label></div>
 <div class="docs" id="ldocs"></div><div class="row"><button class="pill gray" id="lmore" style="display:none"></button></div><p class="note" id="lempty" style="display:none">No notes match. <a href="#" id="lclear">Clear filters</a></p></div><script>window.DOCS=[{"n": 1, "title": "Science: names and firsts", "subject": "Science", "added": "2026-10-11", "points": 7}, {"n": 2, "title": "Computing and space", "subject": "Technology", "added": "2026-10-11", "points": 7}, {"n": 3, "title": "Engineering marvels and engineers", "subject": "Engineering", "added": "2026-10-11", "points": 7}, {"n": 4, "title": "Sports firsts and records", "subject": "Sports", "added": "2026-10-11", "points": 7}, {"n": 5, "title": "Math and art", "subject": "Math & Art", "added": "2026-10-11", "points": 7}];</script></div></details></section>
 <section id="guide"><details class="sec"><summary><h2>4. What to study</h2></summary><div class="body">
@@ -210,17 +219,39 @@ addEventListener('scroll',mark,{passive:true});mark()})();
  const q=document.getElementById('lq'),ch=document.getElementById('lchips'),box=document.getElementById('ldocs'),cnt=document.getElementById('lcount'),srt=document.getElementById('lsort'),more=document.getElementById('lmore'),em=document.getElementById('lempty');
  const PAGE=8;let subj='All',shown=PAGE;
  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
- const subjects=['All',...[...new Set(D.map(d=>d.subject))].sort()];
- function chips(){ch.innerHTML=subjects.map(s=>'<button class="tab'+(s===subj?' on':'')+'" data-s="'+esc(s)+'">'+esc(s)+' <small>'+(s==='All'?D.length:D.filter(d=>d.subject===s).length)+'</small></button>').join('');
+ let subjects=[];const calcS=()=>{subjects=['All',...[...new Set(D.map(d=>d.subject))].sort()]};calcS();
+ function chips(){calcS();ch.innerHTML=subjects.map(s=>'<button class="tab'+(s===subj?' on':'')+'" data-s="'+esc(s)+'">'+esc(s)+' <small>'+(s==='All'?D.length:D.filter(d=>d.subject===s).length)+'</small></button>').join('');
   ch.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{subj=b.dataset.s;shown=PAGE;chips();draw()})}
  function list(){const t=q.value.trim().toLowerCase();let r=D.filter(d=>(subj==='All'||d.subject===subj)&&(!t||(d.title+' '+d.subject).toLowerCase().includes(t)));
   r.sort(srt.value==='az'?(a,b)=>a.title.localeCompare(b.title):(a,b)=>b.added.localeCompare(a.added)||b.n-a.n);return r}
  function draw(){const r=list(),v=r.slice(0,shown);
-  box.innerHTML=v.map(d=>'<div class="doc"><div class="dt"><b>'+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>'+d.points+' key points</span></div><div class="da"><a class="pill sm" href="note-'+d.n+'.html">View</a><a class="pill sm gray" href="note-'+d.n+'.pdf" download>Download</a></div></div>').join('');
+  box.innerHTML=v.map(d=>d.u?'<div class="doc"><div class="dt"><b>'+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>by '+esc(d.by)+'</span></div><div class="da"><a class="pill sm" href="'+d.url+'" target="_blank" rel="noopener">Open</a></div></div>':'<div class="doc"><div class="dt"><b>'+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>'+d.points+' key points</span></div><div class="da"><a class="pill sm" href="note-'+d.n+'.html">View</a><a class="pill sm gray" href="note-'+d.n+'.pdf" download>Download</a></div></div>').join('');
   cnt.textContent=r.length===D.length?D.length+' notes':r.length+' of '+D.length+' notes';
   em.style.display=r.length?'none':'';more.style.display=r.length>shown?'':'none';more.textContent='Show more ('+(r.length-shown)+')'}
  q.addEventListener('input',()=>{shown=PAGE;draw()});srt.onchange=()=>{shown=PAGE;draw()};more.onclick=()=>{shown+=PAGE;draw()};
  document.getElementById('lclear').onclick=e=>{e.preventDefault();q.value='';subj='All';shown=PAGE;chips();draw()};
+ const API='https://dpspr-upload.abhijitswain0x0.workers.dev';
+ const mk=u=>({u:1,n:0,id:u.id,title:u.file,by:u.name,subject:'Class uploads',points:0,added:new Date(u.ts).toISOString(),url:API+'/f/'+u.id});
+ window.libAdd=u=>{if(D.some(d=>d.id===u.id))return;D.push(mk(u));shown=Math.max(shown,PAGE);chips();draw()};
+ fetch(API+'/list').then(r=>r.json()).then(a=>{a.forEach(u=>{if(!D.some(d=>d.id===u.id))D.push(mk(u))});chips();draw()}).catch(()=>{});
  chips();draw()})();
 
+</script><dialog id="am"><form method="dialog" id="amf" novalidate><h3>Add material</h3><p class="hint">Photos, PDFs or documents. Needs the class password. It goes live in the list right away.</p>
+<label for="amn">Name of submitter</label><input id="amn" type="text" autocomplete="name" maxlength="60" required>
+<label>File</label><label class="drop" for="amfile"><span id="amdrop">Tap to choose a photo or file<br><small>Images, PDF, Word, PowerPoint, text. Up to 10 MB.</small></span></label><input id="amfile" type="file" accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.txt" required>
+<label for="amp">Password</label><input id="amp" type="password" autocomplete="off" required>
+<div class="msg" id="ammsg" role="status"></div>
+<div class="acts"><button type="button" id="amcancel">Cancel</button><button type="submit" class="go" id="amgo">Upload</button></div></form></dialog>
+<script>
+(function(){const ENDPOINT='https://dpspr-upload.abhijitswain0x0.workers.dev/submit';const d=document.getElementById('am'),f=d.querySelector('form'),m=document.getElementById('ammsg'),go=document.getElementById('amgo'),fi=document.getElementById('amfile');
+const OK=/\.(png|jpe?g|heic|webp|gif|pdf|docx?|pptx?|txt)$/i,MAX=10*1024*1024;
+document.getElementById('addbtn').onclick=()=>{m.textContent='';m.className='msg';d.showModal()};document.getElementById('amcancel').onclick=()=>d.close();
+d.addEventListener('click',e=>{if(e.target===d)d.close()});
+fi.onchange=()=>{document.getElementById('amdrop').innerHTML=fi.files[0]?'<b>'+fi.files[0].name.replace(/[<>&]/g,'')+'</b>':'Tap to choose a photo or file'};
+function say(t,c){m.textContent=t;m.className='msg '+(c||'')}
+f.addEventListener('submit',async e=>{e.preventDefault();const n=document.getElementById('amn').value.trim(),p=document.getElementById('amp').value,file=fi.files[0];
+if(!n)return say('Enter your name.','err');if(!file)return say('Choose a file.','err');if(!OK.test(file.name))return say('That file type is not allowed.','err');if(file.size>MAX)return say('File is over 10 MB.','err');if(!p)return say('Enter the password.','err');
+go.disabled=true;say('Uploading...');const fd=new FormData();fd.append('name',n);fd.append('password',p);fd.append('file',file);
+try{const r=await fetch(ENDPOINT,{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
+if(r.status===401)say('Wrong password. Nothing was uploaded.','err');else if(r.ok){say('Uploaded. It is in the list now.','ok');if(window.libAdd)window.libAdd({id:j.id,name:n,file:file.name,ts:Date.now()});f.reset();document.getElementById('amdrop').textContent='Tap to choose a photo or file';setTimeout(()=>d.close(),1800)}else say(j.error||'Upload failed. Try again.','err')}catch(x){say('No connection. Try again.','err')}go.disabled=false})})();
 </script></body></html>
