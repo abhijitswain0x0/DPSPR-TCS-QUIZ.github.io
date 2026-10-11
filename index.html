@@ -109,7 +109,7 @@ dialog#vw{border:1px solid var(--bd);border-radius:14px;background:var(--card);c
 #vw .vh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top));border-bottom:1px solid var(--bd)}#vw .vh b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.95rem}#vw .vs{display:flex;align-items:center;gap:12px;flex:0 0 auto}#vw .vs a{color:var(--acc);font-size:.9rem}#vw .vs button.dl{border-color:var(--acc);color:var(--acc)}#vw .vs button{min-height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--bd);background:none;color:var(--fg);font:inherit;font-weight:600;cursor:pointer}
 #vb{flex:1;overflow:auto;padding:12px;-webkit-overflow-scrolling:touch;padding-bottom:calc(12px + env(safe-area-inset-bottom))}#vb img{max-width:100%;height:auto;display:block;margin:0 auto;border-radius:6px}#vb canvas.pg{display:block;margin:0 auto 10px;border:1px solid var(--bd);background:#fff;max-width:100%}#vb .vm{color:var(--mut);text-align:center;padding:30px 10px}#vb pre{white-space:pre-wrap;word-break:break-word;font:inherit;font-size:.92rem;margin:0}#vb .dx{max-width:760px;margin:0 auto;line-height:1.55;word-break:break-word}#vb .dx img{max-width:100%}#vb .dx table{border-collapse:collapse}#vb .dx td,#vb .dx th{border:1px solid var(--bd);padding:4px 8px}#vb .px{margin:0 auto}#vb .pptx-preview-wrapper{height:auto!important;overflow:visible!important;max-width:100%}#vb .px>div{margin-bottom:10px}#vb iframe.of{width:100%;height:100%;min-height:60vh;border:0;background:#fff;border-radius:6px}
 @media(max-width:560px){dialog#vw{width:100vw;height:100dvh;max-width:none;border-radius:0;border:0}}
-</style></head><body><header class="top"><div class="in"><div class="brand">TCS InQuizitive Study Hub <span>Unofficial, by students</span></div><div class="snav" id="snav"><a href="#quiz">Practice</a><a href="#tests">Tests</a><a href="#notesec">Material</a><a href="#guide">Study</a><a href="#rules">Rules</a><a href="#recsec">Recordings</a></div></div></header>
+.docs.sc{overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--bd);border-radius:12px;padding:0 12px}.docs.sc .doc:first-child{border-top:0}</style></head><body><header class="top"><div class="in"><div class="brand">TCS InQuizitive Study Hub <span>Unofficial, by students</span></div><div class="snav" id="snav"><a href="#quiz">Practice</a><a href="#tests">Tests</a><a href="#notesec">Material</a><a href="#guide">Study</a><a href="#rules">Rules</a><a href="#recsec">Recordings</a></div></div></header>
 <main>
 <section id="quiz"><details class="sec" open><summary><h2>1. Practice quiz</h2></summary><div class="body">
 <p class="note">The same five questions as the official practice quiz on tcs.com/inquizitive, with answers taken from TCS's own page. It is small, not a full mock test.</p>
@@ -119,7 +119,7 @@ dialog#vw{border:1px solid var(--bd);border-radius:14px;background:var(--card);c
 <p class="note">Five practice tests with 10 questions each, written by us from well-known facts. They are not TCS questions and not official past papers. Use them to warm up.</p>
 <div class="tabs" id="tests-tabs"></div><div class="qwrap" id="tz"></div></div></details></section>
 <section id="notesec"><details class="sec" open><summary><h2>3. Additional Material</h2></summary><div class="body">
-<p class="note">Class material shared by students. Tap + to add yours (needs the class password). Tap a file to read it here.</p>
+<p class="note">Class material shared by students. Tap + to add yours (needs the class password). Two show at a time. Scroll the list for more.</p>
 <div class="lib"><div class="sbar"><input id="lq" type="search" placeholder="Search notes" aria-label="Search notes"><button type="button" class="icbtn" id="addbtn" aria-label="Add material" title="Add material"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="tabs" id="lchips"></div>
 <div class="lbar"><span id="lcount" class="note"></span><label class="note">Sort <select id="lsort"><option value="new">Newest</option><option value="az">A to Z</option></select></label></div>
 <div class="docs" id="ldocs"></div><div class="row"><button class="pill gray" id="lmore" style="display:none"></button></div><p class="note" id="lempty" style="display:none">No notes match. <a href="#" id="lclear">Clear filters</a></p></div><script>window.DOCS=[];</script></div></details></section>
@@ -241,13 +241,15 @@ addEventListener('scroll',mark,{passive:true});mark()})();
 
 (function(){const D=window.DOCS||[];if(!document.getElementById('ldocs'))return;
  const q=document.getElementById('lq'),ch=document.getElementById('lchips'),box=document.getElementById('ldocs'),cnt=document.getElementById('lcount'),srt=document.getElementById('lsort'),more=document.getElementById('lmore'),em=document.getElementById('lempty');
- const PAGE=8;let subj='All',shown=PAGE;
+ const PAGE=1e9;let subj='All',shown=PAGE;
  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
  let subjects=[];const calcS=()=>{subjects=['All',...[...new Set(D.map(d=>d.subject))].sort()]};calcS();
  function chips(){calcS();ch.innerHTML=subjects.map(s=>'<button class="tab'+(s===subj?' on':'')+'" data-s="'+esc(s)+'">'+esc(s)+' <small>'+(s==='All'?D.length:D.filter(d=>d.subject===s).length)+'</small></button>').join('');
   ch.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{subj=b.dataset.s;shown=PAGE;chips();draw()})}
  function list(){const t=q.value.trim().toLowerCase();let r=D.filter(d=>(subj==='All'||d.subject===subj)&&(!t||(d.title+' '+d.subject).toLowerCase().includes(t)));
   r.sort(srt.value==='az'?(a,b)=>a.title.localeCompare(b.title):(a,b)=>b.added.localeCompare(a.added)||b.n-a.n);return r}
+ function fit(){const k=[...box.children].slice(0,2);box.style.maxHeight='';if(box.children.length>2){const h=k.reduce((s,e)=>s+e.offsetHeight,0);box.style.maxHeight=h+'px';box.classList.add('sc')}else box.classList.remove('sc')}
+ addEventListener('resize',fit);
  function draw(){const r=list(),v=r.slice(0,shown);
   const open=window._lopen||(window._lopen=new Set());
   box.innerHTML=v.map(d=>{if(!d.u)return '<div class="doc"><div class="dt"><b>'+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>'+d.points+' key points</span></div><div class="da"><a class="pill sm" href="note-'+d.n+'.html">View</a><a class="pill sm gray" href="note-'+d.n+'.pdf" download>Download</a></div></div>';
@@ -257,7 +259,7 @@ addEventListener('scroll',mark,{passive:true});mark()})();
   box.querySelectorAll('a[data-v]').forEach(a=>a.onclick=e=>{if(window.libView){e.preventDefault();window.libView(a.href,a.dataset.f)}});
   box.querySelectorAll('[data-more]').forEach(b=>b.onclick=e=>{e.stopPropagation();window.libMenu&&window.libMenu(b,b.dataset.more)});
   cnt.textContent=r.length===D.length?D.length+' notes':r.length+' of '+D.length+' notes';
-  em.style.display=r.length?'none':'';more.style.display=r.length>shown?'':'none';more.textContent='Show more ('+(r.length-shown)+')'}
+  em.style.display=r.length?'none':'';more.style.display='none';fit();more.textContent='Show more ('+(r.length-shown)+')'}
  q.addEventListener('input',()=>{shown=PAGE;draw()});srt.onchange=()=>{shown=PAGE;draw()};more.onclick=()=>{shown+=PAGE;draw()};
  document.getElementById('lclear').onclick=e=>{e.preventDefault();q.value='';subj='All';shown=PAGE;chips();draw()};
  const API='https://dpspr-upload.abhijitswain0x0.workers.dev';
@@ -267,7 +269,7 @@ addEventListener('scroll',mark,{passive:true});mark()})();
  window.libAdd=u=>{addU(u);shown=Math.max(shown,PAGE);chips();draw()};
  window.libDel=gid=>{const d=D.find(x=>x.u&&x.gid===gid);if(!d)return;const dm=document.getElementById('dm');if(!dm)return;dm.dataset.gid=gid;dm.querySelector('.dtitle').textContent='Delete "'+d.title+'"'+(d.files.length>1?' and its '+d.files.length+' files':'')+'? This cannot be undone.';document.getElementById('dmp').value='';document.getElementById('dmmsg').textContent='';dm.showModal()};
  window.libMenu=(btn,gid)=>{let mn=document.getElementById('mn');if(!mn){mn=document.createElement('div');mn.id='mn';mn.setAttribute('role','menu');mn.hidden=true;document.body.appendChild(mn);
-  const hide=()=>{mn.hidden=true};document.addEventListener('click',hide);addEventListener('scroll',hide,{passive:true});addEventListener('resize',hide);document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()})}
+  const hide=()=>{mn.hidden=true};document.addEventListener('click',hide);addEventListener('scroll',hide,{passive:true,capture:true});addEventListener('resize',hide);document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()})}
   if(!mn.hidden&&mn.dataset.g===gid){mn.hidden=true;return}
   mn.dataset.g=gid;mn.innerHTML='<button type="button" role="menuitem" data-a="r">Rename</button><button type="button" role="menuitem" data-a="d" class="dn">Delete</button>';
   mn.querySelector('[data-a=r]').onclick=()=>{mn.hidden=true;window.libRen(gid)};mn.querySelector('[data-a=d]').onclick=()=>{mn.hidden=true;window.libDel(gid)};
