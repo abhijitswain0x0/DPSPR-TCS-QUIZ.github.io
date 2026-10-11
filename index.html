@@ -231,13 +231,14 @@ addEventListener('scroll',mark,{passive:true});mark()})();
  q.addEventListener('input',()=>{shown=PAGE;draw()});srt.onchange=()=>{shown=PAGE;draw()};more.onclick=()=>{shown+=PAGE;draw()};
  document.getElementById('lclear').onclick=e=>{e.preventDefault();q.value='';subj='All';shown=PAGE;chips();draw()};
  const API='https://dpspr-upload.abhijitswain0x0.workers.dev';
- const mk=u=>({u:1,n:0,id:u.id,title:u.file,by:u.name,subject:'Class uploads',points:0,added:new Date(u.ts).toISOString(),url:API+'/f/'+u.id});
+ const mk=u=>({u:1,n:0,id:u.id,title:u.file.replace(/\.[^.]+$/,''),by:u.name,subject:'Class uploads',points:0,added:new Date(u.ts).toISOString(),url:API+'/f/'+u.id});
  window.libAdd=u=>{if(D.some(d=>d.id===u.id))return;D.push(mk(u));shown=Math.max(shown,PAGE);chips();draw()};
  fetch(API+'/list').then(r=>r.json()).then(a=>{a.forEach(u=>{if(!D.some(d=>d.id===u.id))D.push(mk(u))});chips();draw()}).catch(()=>{});
  chips();draw()})();
 
 </script><dialog id="am"><form method="dialog" id="amf" novalidate><h3>Add material</h3><p class="hint">Photos, PDFs or documents. Needs the class password. It goes live in the list right away.</p>
 <label for="amn">Name of submitter</label><input id="amn" type="text" autocomplete="name" maxlength="60" required>
+<label for="amt">Material name</label><input id="amt" type="text" maxlength="80" placeholder="e.g. Unit 3 notes" required>
 <label>Files</label><label class="drop" for="amfile"><span id="amdrop">Tap to choose photos or files<br><small>Images, PDF, Word, PowerPoint, text. Up to 10 files, 10 MB each, 30 MB total.</small></span></label><input id="amfile" type="file" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.txt" required>
 <label for="amp">Password</label><input id="amp" type="password" autocomplete="off" required>
 <div class="msg" id="ammsg" role="status"></div>
@@ -251,14 +252,14 @@ fi.onchange=()=>{const a=[...fi.files];document.getElementById('amdrop').innerHT
 function say(t,c){m.textContent=t;m.className='msg '+(c||'')}
 const MAXN=10,TOT=30*1024*1024;
 f.addEventListener('submit',async e=>{e.preventDefault();const n=document.getElementById('amn').value.trim(),p=document.getElementById('amp').value,files=[...fi.files];
-if(!n)return say('Enter your name.','err');if(!files.length)return say('Choose at least one file.','err');if(files.length>MAXN)return say('Up to '+MAXN+' files at a time.','err');
+if(!n)return say('Enter your name.','err');const t=document.getElementById('amt').value.replace(/[^\w.\- ()]/g,' ').replace(/\s+/g,' ').trim().slice(0,80);if(!t)return say('Enter a material name.','err');if(!files.length)return say('Choose at least one file.','err');if(files.length>MAXN)return say('Up to '+MAXN+' files at a time.','err');
 const bad=files.find(x=>!OK.test(x.name));if(bad)return say(bad.name+': file type not allowed.','err');const big=files.find(x=>x.size>MAX);if(big)return say(big.name+' is over 10 MB.','err');
 if(files.reduce((s,x)=>s+x.size,0)>TOT)return say('Total is over 30 MB. Upload in smaller batches.','err');if(!p)return say('Enter the password.','err');
 go.disabled=true;let done=0;const fails=[];
-for(const file of files){say('Uploading '+(done+fails.length+1)+' of '+files.length+'...');const fd=new FormData();fd.append('name',n);fd.append('password',p);fd.append('file',file);
+for(const file of files){say('Uploading '+(done+fails.length+1)+' of '+files.length+'...');const ext=(file.name.match(/\.[A-Za-z0-9]+$/)||[''])[0].toLowerCase(),nm=t+(files.length>1?' ('+(done+fails.length+1)+')':'')+ext;const fd=new FormData();fd.append('name',n);fd.append('password',p);fd.append('file',file,nm);
 try{const r=await fetch(ENDPOINT,{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
 if(r.status===401){say(done?'Wrong password. '+done+' uploaded before that.':'Wrong password. Nothing was uploaded.','err');go.disabled=false;return}
-if(r.ok){done++;if(window.libAdd)window.libAdd({id:j.id,name:n,file:file.name,ts:Date.now()})}else fails.push(file.name+': '+(j.error||'failed'))}catch(x){fails.push(file.name+': no connection')}}
+if(r.ok){done++;if(window.libAdd)window.libAdd({id:j.id,name:n,file:nm,ts:Date.now()})}else fails.push(file.name+': '+(j.error||'failed'))}catch(x){fails.push(file.name+': no connection')}}
 go.disabled=false;
 if(fails.length)return say((done?done+' uploaded. ':'')+'Failed: '+fails.join('; '),'err');
 say(done===1?'Uploaded. It is in the list now.':done+' files uploaded. They are in the list now.','ok');f.reset();document.getElementById('amdrop').textContent='Tap to choose photos or files';setTimeout(()=>d.close(),1800)})})();
