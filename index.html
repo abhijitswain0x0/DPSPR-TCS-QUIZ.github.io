@@ -85,6 +85,14 @@ dialog#am{border:1px solid var(--bd);border-radius:14px;background:var(--card);c
 #am .acts{display:flex;gap:8px;margin-top:16px}#am .acts button{flex:1;min-height:44px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--bd);background:none;color:var(--fg)}#am .acts button.go{background:var(--acc);border-color:var(--acc);color:#fff}#am .acts button:disabled{opacity:.5;cursor:default}
 #am .msg{min-height:1.3em;margin-top:10px;font-size:.9rem}#am .msg.err{color:#d93025}#am .msg.ok{color:#1f8a3b}
 @media(max-width:560px){dialog#am{margin:auto auto 0;width:100%;max-width:none;border-radius:14px 14px 0 0;border-bottom:0}}
+dialog#dm{border:1px solid var(--bd);border-radius:14px;background:var(--card);color:var(--fg);padding:0;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}dialog#dm::backdrop{background:rgba(0,0,0,.45)}
+#dm form{padding:18px 16px calc(16px + env(safe-area-inset-bottom))}#dm h3{margin:0 0 4px;font-size:1.1rem}#dm .hint{color:var(--mut);font-size:.9rem;margin:0 0 14px}
+#dm label{display:block;font-size:.85rem;font-weight:600;margin:12px 0 5px}#dm input[type=text],#dm input[type=password]{width:100%;font:inherit;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:transparent;color:var(--fg);min-height:44px}
+#dm .drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px;border:1px dashed var(--mut);border-radius:10px;text-align:center;cursor:pointer;color:var(--mut);font-size:.92rem}#dm .drop b{color:var(--fg);font-weight:600;word-break:break-all}#dm input[type=file]{position:absolute;opacity:0;width:1px;height:1px}
+#dm .acts{display:flex;gap:8px;margin-top:16px}#dm .acts button{flex:1;min-height:44px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--bd);background:none;color:var(--fg)}#dm .acts button.go{background:var(--acc);border-color:var(--acc);color:#fff}#dm .acts button:disabled{opacity:.5;cursor:default}
+#dm .msg{min-height:1.3em;margin-top:10px;font-size:.9rem}#dm .msg.err{color:#d93025}#dm .msg.ok{color:#1f8a3b}
+.files{display:flex;flex-direction:column;margin:-4px 0 10px 18px;padding-left:12px;border-left:2px solid var(--bd)}.files a{padding:8px 0;color:var(--acc);word-break:break-all}.pill.sm[data-fold],.pill.sm[data-del]{font:inherit;cursor:pointer}
+@media(max-width:560px){dialog#dm{margin:auto auto 0;width:100%;max-width:none;border-radius:14px 14px 0 0;border-bottom:0}}
 </style></head><body><header class="top"><div class="in"><div class="brand">TCS InQuizitive Study Hub <span>Unofficial, by students</span></div><div class="snav" id="snav"><a href="#quiz">Practice</a><a href="#tests">Tests</a><a href="#notesec">Material</a><a href="#guide">Study</a><a href="#rules">Rules</a><a href="#recsec">Recordings</a></div></div></header>
 <main>
 <section id="quiz"><details class="sec" open><summary><h2>1. Practice quiz</h2></summary><div class="body">
@@ -225,15 +233,25 @@ addEventListener('scroll',mark,{passive:true});mark()})();
  function list(){const t=q.value.trim().toLowerCase();let r=D.filter(d=>(subj==='All'||d.subject===subj)&&(!t||(d.title+' '+d.subject).toLowerCase().includes(t)));
   r.sort(srt.value==='az'?(a,b)=>a.title.localeCompare(b.title):(a,b)=>b.added.localeCompare(a.added)||b.n-a.n);return r}
  function draw(){const r=list(),v=r.slice(0,shown);
-  box.innerHTML=v.map(d=>d.u?'<div class="doc"><div class="dt"><b>'+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>by '+esc(d.by)+'</span></div><div class="da"><a class="pill sm" href="'+d.url+'" target="_blank" rel="noopener">Open</a></div></div>':'<div class="doc"><div class="dt"><b>'+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>'+d.points+' key points</span></div><div class="da"><a class="pill sm" href="note-'+d.n+'.html">View</a><a class="pill sm gray" href="note-'+d.n+'.pdf" download>Download</a></div></div>').join('');
+  const open=window._lopen||(window._lopen=new Set());
+  box.innerHTML=v.map(d=>{if(!d.u)return '<div class="doc"><div class="dt"><b>'+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>'+d.points+' key points</span></div><div class="da"><a class="pill sm" href="note-'+d.n+'.html">View</a><a class="pill sm gray" href="note-'+d.n+'.pdf" download>Download</a></div></div>';
+   const k=d.files.length,one=k===1,o=open.has(d.gid);
+   return '<div class="doc"><div class="dt"><b>'+(one?'':'&#128193; ')+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>by '+esc(d.by)+(one?'':' &middot; '+k+' files')+'</span></div><div class="da">'+(one?'<a class="pill sm" href="'+d.files[0].url+'" target="_blank" rel="noopener">Open</a>':'<button type="button" class="pill sm" data-fold="'+d.gid+'">'+(o?'Close':'Open folder')+'</button>')+'<button type="button" class="pill sm gray" data-del="'+d.gid+'" aria-label="Delete '+esc(d.title)+'">Delete</button></div></div>'+(!one&&o?'<div class="files">'+d.files.map(f=>'<a href="'+f.url+'" target="_blank" rel="noopener">'+esc(f.file)+'</a>').join('')+'</div>':'')}).join('');
+  box.querySelectorAll('[data-fold]').forEach(b=>b.onclick=()=>{const g=b.dataset.fold;open.has(g)?open.delete(g):open.add(g);draw()});
+  box.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>window.libDel&&window.libDel(b.dataset.del));
   cnt.textContent=r.length===D.length?D.length+' notes':r.length+' of '+D.length+' notes';
   em.style.display=r.length?'none':'';more.style.display=r.length>shown?'':'none';more.textContent='Show more ('+(r.length-shown)+')'}
  q.addEventListener('input',()=>{shown=PAGE;draw()});srt.onchange=()=>{shown=PAGE;draw()};more.onclick=()=>{shown+=PAGE;draw()};
  document.getElementById('lclear').onclick=e=>{e.preventDefault();q.value='';subj='All';shown=PAGE;chips();draw()};
  const API='https://dpspr-upload.abhijitswain0x0.workers.dev';
- const mk=u=>({u:1,n:0,id:u.id,title:u.file.replace(/\.[^.]+$/,''),by:u.name,subject:'Class uploads',points:0,added:new Date(u.ts).toISOString(),url:API+'/f/'+u.id});
- window.libAdd=u=>{if(D.some(d=>d.id===u.id))return;D.push(mk(u));shown=Math.max(shown,PAGE);chips();draw()};
- fetch(API+'/list').then(r=>r.json()).then(a=>{a.forEach(u=>{if(!D.some(d=>d.id===u.id))D.push(mk(u))});chips();draw()}).catch(()=>{});
+ const addU=u=>{const g=u.group||u.id;let d=D.find(x=>x.u&&x.gid===g);const iso=new Date(u.ts).toISOString();
+  if(!d){d={u:1,n:0,gid:g,title:u.title||u.file.replace(/\.[^.]+$/,''),by:u.name,subject:'Class uploads',points:0,added:iso,files:[]};D.push(d)}
+  if(d.files.some(f=>f.id===u.id))return;d.files.push({id:u.id,file:u.file,url:API+'/f/'+u.id});d.files.sort((a,b)=>a.file.localeCompare(b.file,undefined,{numeric:true}));if(iso>d.added)d.added=iso};
+ window.libAdd=u=>{addU(u);shown=Math.max(shown,PAGE);chips();draw()};
+ window.libDel=gid=>{const d=D.find(x=>x.u&&x.gid===gid);if(!d)return;const dm=document.getElementById('dm');if(!dm)return;dm.dataset.gid=gid;dm.querySelector('.dtitle').textContent='Delete "'+d.title+'"'+(d.files.length>1?' and its '+d.files.length+' files':'')+'? This cannot be undone.';document.getElementById('dmp').value='';document.getElementById('dmmsg').textContent='';dm.showModal()};
+ window.libIds=gid=>{const d=D.find(x=>x.u&&x.gid===gid);return d?d.files.map(f=>f.id):[]};
+ window.libGone=gid=>{const i=D.findIndex(x=>x.u&&x.gid===gid);if(i>=0)D.splice(i,1);chips();draw()};
+ fetch(API+'/list').then(r=>r.json()).then(a=>{a.sort((x,y)=>x.ts-y.ts).forEach(addU);chips();draw()}).catch(()=>{});
  chips();draw()})();
 
 </script><dialog id="am"><form method="dialog" id="amf" novalidate><h3>Add material</h3><p class="hint">Photos, PDFs or documents. Needs the class password. It goes live in the list right away.</p>
@@ -255,12 +273,24 @@ f.addEventListener('submit',async e=>{e.preventDefault();const n=document.getEle
 if(!n)return say('Enter your name.','err');const t=document.getElementById('amt').value.replace(/[^\w.\- ()]/g,' ').replace(/\s+/g,' ').trim().slice(0,80);if(!t)return say('Enter a material name.','err');if(!files.length)return say('Choose at least one file.','err');if(files.length>MAXN)return say('Up to '+MAXN+' files at a time.','err');
 const bad=files.find(x=>!OK.test(x.name));if(bad)return say(bad.name+': file type not allowed.','err');const big=files.find(x=>x.size>MAX);if(big)return say(big.name+' is over 10 MB.','err');
 if(files.reduce((s,x)=>s+x.size,0)>TOT)return say('Total is over 30 MB. Upload in smaller batches.','err');if(!p)return say('Enter the password.','err');
-go.disabled=true;let done=0;const fails=[];
-for(const file of files){say('Uploading '+(done+fails.length+1)+' of '+files.length+'...');const ext=(file.name.match(/\.[A-Za-z0-9]+$/)||[''])[0].toLowerCase(),nm=t+(files.length>1?' ('+(done+fails.length+1)+')':'')+ext;const fd=new FormData();fd.append('name',n);fd.append('password',p);fd.append('file',file,nm);
+go.disabled=true;let done=0;const gid=Array.from(crypto.getRandomValues(new Uint8Array(12)),b=>(b%36).toString(36)).join('');const fails=[];
+for(const file of files){say('Uploading '+(done+fails.length+1)+' of '+files.length+'...');const fd=new FormData();fd.append('name',n);fd.append('title',t);fd.append('group',gid);fd.append('password',p);fd.append('file',file);
 try{const r=await fetch(ENDPOINT,{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
 if(r.status===401){say(done?'Wrong password. '+done+' uploaded before that.':'Wrong password. Nothing was uploaded.','err');go.disabled=false;return}
-if(r.ok){done++;if(window.libAdd)window.libAdd({id:j.id,name:n,file:nm,ts:Date.now()})}else fails.push(file.name+': '+(j.error||'failed'))}catch(x){fails.push(file.name+': no connection')}}
+if(r.ok){done++;if(window.libAdd)window.libAdd({id:j.id,name:n,title:t,group:gid,file:file.name,ts:Date.now()})}else fails.push(file.name+': '+(j.error||'failed'))}catch(x){fails.push(file.name+': no connection')}}
 go.disabled=false;
 if(fails.length)return say((done?done+' uploaded. ':'')+'Failed: '+fails.join('; '),'err');
 say(done===1?'Uploaded. It is in the list now.':done+' files uploaded. They are in the list now.','ok');f.reset();document.getElementById('amdrop').textContent='Tap to choose photos or files';setTimeout(()=>d.close(),1800)})})();
-</script></body></html>
+</script><dialog id="dm"><form method="dialog" id="dmf" novalidate><h3>Delete material</h3><p class="hint dtitle"></p>
+<label for="dmp">Class password</label><input id="dmp" type="password" autocomplete="off" required>
+<div class="msg" id="dmmsg" role="status"></div>
+<div class="acts"><button type="button" id="dmcancel">Cancel</button><button type="submit" class="go" id="dmgo" style="background:#d93025;border-color:#d93025">Delete</button></div></form></dialog>
+<script>
+(function(){const API='https://dpspr-upload.abhijitswain0x0.workers.dev';const d=document.getElementById('dm'),m=document.getElementById('dmmsg'),go=document.getElementById('dmgo');
+document.getElementById('dmcancel').onclick=()=>d.close();d.addEventListener('click',e=>{if(e.target===d)d.close()});
+document.getElementById('dmf').addEventListener('submit',async e=>{e.preventDefault();const p=document.getElementById('dmp').value,g=d.dataset.gid;if(!p){m.textContent='Enter the password.';m.className='msg err';return}
+const x=window._ldocs&&0;go.disabled=true;m.className='msg';m.textContent='Deleting...';
+try{const ids=(window.libIds?window.libIds(g):[]).join(',');const fd=new FormData();fd.append('password',p);fd.append('ids',ids);const r=await fetch(API+'/delete',{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
+if(r.status===401){m.textContent='Wrong password. Nothing was deleted.';m.className='msg err'}else if(r.ok){window.libGone(g);d.close()}else{m.textContent=j.error||'Delete failed. Try again.';m.className='msg err'}}catch(x){m.textContent='No connection. Try again.';m.className='msg err'}go.disabled=false})})();
+</script>
+</body></html>
