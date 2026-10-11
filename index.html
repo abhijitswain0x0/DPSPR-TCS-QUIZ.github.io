@@ -91,6 +91,18 @@ dialog#dm{border:1px solid var(--bd);border-radius:14px;background:var(--card);c
 #dm .drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px;border:1px dashed var(--mut);border-radius:10px;text-align:center;cursor:pointer;color:var(--mut);font-size:.92rem}#dm .drop b{color:var(--fg);font-weight:600;word-break:break-all}#dm input[type=file]{position:absolute;opacity:0;width:1px;height:1px}
 #dm .acts{display:flex;gap:8px;margin-top:16px}#dm .acts button{flex:1;min-height:44px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--bd);background:none;color:var(--fg)}#dm .acts button.go{background:var(--acc);border-color:var(--acc);color:#fff}#dm .acts button:disabled{opacity:.5;cursor:default}
 #dm .msg{min-height:1.3em;margin-top:10px;font-size:.9rem}#dm .msg.err{color:#d93025}#dm .msg.ok{color:#1f8a3b}
+dialog#rm{border:1px solid var(--bd);border-radius:14px;background:var(--card);color:var(--fg);padding:0;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}dialog#rm::backdrop{background:rgba(0,0,0,.45)}
+#rm form{padding:18px 16px calc(16px + env(safe-area-inset-bottom))}#rm h3{margin:0 0 4px;font-size:1.1rem}#rm .hint{color:var(--mut);font-size:.9rem;margin:0 0 14px}
+#rm label{display:block;font-size:.85rem;font-weight:600;margin:12px 0 5px}#rm input[type=text],#rm input[type=password]{width:100%;font:inherit;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:transparent;color:var(--fg);min-height:44px}
+#rm .drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px;border:1px dashed var(--mut);border-radius:10px;text-align:center;cursor:pointer;color:var(--mut);font-size:.92rem}#rm .drop b{color:var(--fg);font-weight:600;word-break:break-all}#rm input[type=file]{position:absolute;opacity:0;width:1px;height:1px}
+#rm .acts{display:flex;gap:8px;margin-top:16px}#rm .acts button{flex:1;min-height:44px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--bd);background:none;color:var(--fg)}#rm .acts button.go{background:var(--acc);border-color:var(--acc);color:#fff}#rm .acts button:disabled{opacity:.5;cursor:default}
+#rm .msg{min-height:1.3em;margin-top:10px;font-size:.9rem}#rm .msg.err{color:#d93025}#rm .msg.ok{color:#1f8a3b}
+@media(max-width:560px){dialog#rm{margin:auto auto 0;width:100%;max-width:none;border-radius:14px 14px 0 0;border-bottom:0}}
+#rm .rr{display:flex;flex-direction:column;gap:2px}#rm .rr small{color:var(--mut);font-size:.8rem}
+#am .rows{margin-top:10px;display:flex;flex-direction:column;gap:10px}#am .rows .rw{border-top:1px solid var(--bd);padding-top:10px}#am .rows .rw:first-child{border-top:0;padding-top:0}
+#am .rows s{display:block;color:var(--mut);font-size:.8rem;word-break:break-all;margin-bottom:4px}#am .rows .ok{color:var(--mut);font-size:.85rem;word-break:break-all}#am .rows .tg{display:inline-block;margin-top:4px;font-size:.72rem;border:1px solid var(--bd);border-radius:6px;padding:1px 6px;color:var(--mut)}
+#mn{position:fixed;z-index:100;min-width:170px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:4px;box-shadow:0 6px 24px rgba(0,0,0,.35)}#mn[hidden]{display:none}#mn button{display:block;width:100%;text-align:left;font:inherit;padding:11px 12px;min-height:44px;background:none;border:0;border-radius:8px;color:var(--fg);cursor:pointer}#mn button:hover{background:var(--fill)}#mn button.dn{color:#d93025}
+.pill.sm[data-more]{padding:7px 14px;font-size:1.2rem;line-height:1;cursor:pointer;flex:0 0 auto}
 .files{display:flex;flex-direction:column;margin:-4px 0 10px 18px;padding-left:12px;border-left:2px solid var(--bd)}.files a{padding:8px 0;color:var(--acc);word-break:break-all}.pill.sm[data-fold],.pill.sm[data-del]{font:inherit;cursor:pointer}
 @media(max-width:560px){dialog#dm{margin:auto auto 0;width:100%;max-width:none;border-radius:14px 14px 0 0;border-bottom:0}}
 dialog#vw{border:1px solid var(--bd);border-radius:14px;background:var(--card);color:var(--fg);padding:0;width:min(980px,calc(100vw - 16px));height:min(92dvh,900px);max-height:none;overflow:hidden;flex-direction:column}dialog#vw[open]{display:flex}dialog#vw::backdrop{background:rgba(0,0,0,.55)}
@@ -240,10 +252,10 @@ addEventListener('scroll',mark,{passive:true});mark()})();
   const open=window._lopen||(window._lopen=new Set());
   box.innerHTML=v.map(d=>{if(!d.u)return '<div class="doc"><div class="dt"><b>'+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>'+d.points+' key points</span></div><div class="da"><a class="pill sm" href="note-'+d.n+'.html">View</a><a class="pill sm gray" href="note-'+d.n+'.pdf" download>Download</a></div></div>';
    const k=d.files.length,one=k===1,o=open.has(d.gid);
-   return '<div class="doc"><div class="dt"><b>'+(one?'':'&#128193; ')+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>by '+esc(d.by)+(one?'':' &middot; '+k+' files')+'</span></div><div class="da">'+(one?'<a class="pill sm" data-v="1" data-f="'+esc(d.files[0].file)+'" href="'+d.files[0].url+'" target="_blank" rel="noopener">Open</a>':'<button type="button" class="pill sm" data-fold="'+d.gid+'">'+(o?'Close':'Open folder')+'</button>')+'<button type="button" class="pill sm gray" data-del="'+d.gid+'" aria-label="Delete '+esc(d.title)+'">Delete</button></div></div>'+(!one&&o?'<div class="files">'+d.files.map(f=>'<a data-v="1" data-f="'+esc(f.file)+'" href="'+f.url+'" target="_blank" rel="noopener">'+esc(f.file)+'</a>').join('')+'</div>':'')}).join('');
+   return '<div class="doc"><div class="dt"><b>'+(one?'':'&#128193; ')+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>by '+esc(d.by)+(one?'':' &middot; '+k+' files')+'</span></div><div class="da">'+(one?'<a class="pill sm" data-v="1" data-f="'+esc(d.files[0].file)+'" href="'+d.files[0].url+'" target="_blank" rel="noopener">Open</a>':'<button type="button" class="pill sm" data-fold="'+d.gid+'">'+(o?'Close':'Open folder')+'</button>')+'<button type="button" class="pill sm gray" data-more="'+d.gid+'" aria-haspopup="menu" aria-label="More actions for '+esc(d.title)+'">&#8943;</button></div></div>'+(!one&&o?'<div class="files">'+d.files.map(f=>'<a data-v="1" data-f="'+esc(f.file)+'" href="'+f.url+'" target="_blank" rel="noopener">'+esc(f.file)+'</a>').join('')+'</div>':'')}).join('');
   box.querySelectorAll('[data-fold]').forEach(b=>b.onclick=()=>{const g=b.dataset.fold;open.has(g)?open.delete(g):open.add(g);draw()});
   box.querySelectorAll('a[data-v]').forEach(a=>a.onclick=e=>{if(window.libView){e.preventDefault();window.libView(a.href,a.dataset.f)}});
-  box.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>window.libDel&&window.libDel(b.dataset.del));
+  box.querySelectorAll('[data-more]').forEach(b=>b.onclick=e=>{e.stopPropagation();window.libMenu&&window.libMenu(b,b.dataset.more)});
   cnt.textContent=r.length===D.length?D.length+' notes':r.length+' of '+D.length+' notes';
   em.style.display=r.length?'none':'';more.style.display=r.length>shown?'':'none';more.textContent='Show more ('+(r.length-shown)+')'}
  q.addEventListener('input',()=>{shown=PAGE;draw()});srt.onchange=()=>{shown=PAGE;draw()};more.onclick=()=>{shown+=PAGE;draw()};
@@ -254,6 +266,16 @@ addEventListener('scroll',mark,{passive:true});mark()})();
   if(d.files.some(f=>f.id===u.id))return;d.files.push({id:u.id,file:u.file,url:API+'/f/'+u.id});d.files.sort((a,b)=>a.file.localeCompare(b.file,undefined,{numeric:true}));if(iso>d.added)d.added=iso};
  window.libAdd=u=>{addU(u);shown=Math.max(shown,PAGE);chips();draw()};
  window.libDel=gid=>{const d=D.find(x=>x.u&&x.gid===gid);if(!d)return;const dm=document.getElementById('dm');if(!dm)return;dm.dataset.gid=gid;dm.querySelector('.dtitle').textContent='Delete "'+d.title+'"'+(d.files.length>1?' and its '+d.files.length+' files':'')+'? This cannot be undone.';document.getElementById('dmp').value='';document.getElementById('dmmsg').textContent='';dm.showModal()};
+ window.libMenu=(btn,gid)=>{let mn=document.getElementById('mn');if(!mn){mn=document.createElement('div');mn.id='mn';mn.setAttribute('role','menu');mn.hidden=true;document.body.appendChild(mn);
+  const hide=()=>{mn.hidden=true};document.addEventListener('click',hide);addEventListener('scroll',hide,{passive:true});addEventListener('resize',hide);document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()})}
+  if(!mn.hidden&&mn.dataset.g===gid){mn.hidden=true;return}
+  mn.dataset.g=gid;mn.innerHTML='<button type="button" role="menuitem" data-a="r">Rename</button><button type="button" role="menuitem" data-a="d" class="dn">Delete</button>';
+  mn.querySelector('[data-a=r]').onclick=()=>{mn.hidden=true;window.libRen(gid)};mn.querySelector('[data-a=d]').onclick=()=>{mn.hidden=true;window.libDel(gid)};
+  mn.hidden=false;const r=btn.getBoundingClientRect();mn.style.top=Math.min(r.bottom+4,innerHeight-110)+'px';mn.style.left=Math.max(8,Math.min(r.right-mn.offsetWidth,innerWidth-mn.offsetWidth-8))+'px';mn.querySelector('button').focus()};
+ window.libRen=gid=>{const d=D.find(x=>x.u&&x.gid===gid);const rm=document.getElementById('rm');if(!d||!rm)return;rm.dataset.gid=gid;document.getElementById('rmt').value=d.title;
+  document.getElementById('rmfiles').innerHTML=d.files.map(f=>'<label class="rr">File name<input type="text" maxlength="100" data-id="'+f.id+'" data-o="'+esc(f.file)+'" value="'+esc(f.file)+'"></label>').join('');
+  document.getElementById('rmp').value='';document.getElementById('rmmsg').textContent='';rm.showModal()};
+ window.libRenamed=(gid,title,map)=>{const d=D.find(x=>x.u&&x.gid===gid);if(!d)return;if(title)d.title=title;d.files.forEach(f=>{if(map[f.id])f.file=map[f.id]});d.files.sort((a,b)=>a.file.localeCompare(b.file,undefined,{numeric:true}));draw()};
  window.libIds=gid=>{const d=D.find(x=>x.u&&x.gid===gid);return d?d.files.map(f=>f.id):[]};
  window.libGone=gid=>{const i=D.findIndex(x=>x.u&&x.gid===gid);if(i>=0)D.splice(i,1);chips();draw()};
  fetch(API+'/list').then(r=>r.json()).then(a=>{a.sort((x,y)=>x.ts-y.ts).forEach(addU);chips();draw()}).catch(()=>{});
@@ -263,6 +285,7 @@ addEventListener('scroll',mark,{passive:true});mark()})();
 <label for="amn">Name of submitter</label><input id="amn" type="text" autocomplete="name" maxlength="60" required>
 <label for="amt">Material name</label><input id="amt" type="text" maxlength="80" placeholder="e.g. Unit 3 notes" required>
 <label>Files</label><label class="drop" for="amfile"><span id="amdrop">Tap to choose photos or files<br><small>Images, PDF, Word, PowerPoint, text. Up to 10 files, 10 MB each, 30 MB total.</small></span></label><input id="amfile" type="file" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.txt" required>
+<div class="rows" id="amrows"></div>
 <label for="amp">Password</label><input id="amp" type="password" autocomplete="off" required>
 <div class="msg" id="ammsg" role="status"></div>
 <div class="acts"><button type="button" id="amcancel">Cancel</button><button type="submit" class="go" id="amgo">Upload</button></div></form></dialog>
@@ -271,11 +294,30 @@ addEventListener('scroll',mark,{passive:true});mark()})();
 const OK=/\.(png|jpe?g|heic|webp|gif|pdf|docx?|pptx?|txt)$/i,MAX=10*1024*1024;
 document.getElementById('addbtn').onclick=()=>{m.textContent='';m.className='msg';d.showModal()};document.getElementById('amcancel').onclick=()=>d.close();
 d.addEventListener('click',e=>{if(e.target===d)d.close()});
-fi.onchange=()=>{const a=[...fi.files];document.getElementById('amdrop').innerHTML=a.length?'<b>'+a.map(x=>x.name.replace(/[<>&]/g,'')).join('<br>')+'</b>':'Tap to choose photos or files'};
+const gib=n=>{const s=n.replace(/\.[^.]+$/,'').trim();if(!s)return true;
+ if(/^[0-9a-f]{8}-?([0-9a-f]{4}-?){3}[0-9a-f]{12}$/i.test(s)||/^[0-9a-f]{16,}$/i.test(s))return true;
+ if(/^(IMG|DSC|DSCN|PXL|MVIMG|VID|PHOTO|SCAN|CAM|IMAGE|PIC)[-_ ]?[\d_\-. ]+(\(\d+\))?$/i.test(s))return true;
+ if(/^(WhatsApp (Image|Video|Document)|Screenshot|Screen Shot|Photo|Image|Scan)\b.*\d/i.test(s))return true;
+ if(/^(image|untitled|download|document|scan|file|new|photo|unnamed)[ _-]*(\(\d+\)|\d+)?$/i.test(s))return true;
+ const dg=(s.match(/\d/g)||[]).length,al=(s.match(/[A-Za-z]/g)||[]).length;if(s.length>=6&&dg/(dg+al)>=.7)return true;
+ if(/^[A-Za-z0-9_-]{18,}$/.test(s)&&dg>=3)return true;return false};
+window.libGib=gib;
+const ex=n=>(n.match(/\.[^.]+$/)||[''])[0].toLowerCase(),eh=s=>s.replace(/[<>&"]/g,'');
+const rows=document.getElementById('amrows'),ti=document.getElementById('amt');
+const clean=s=>s.replace(/[^\w.\- ()]/g,' ').replace(/\s+/g,' ').trim();
+function sug(){const a=[...fi.files],t=clean(ti.value);const g=a.filter(x=>gib(x.name));let k=0;
+ rows.querySelectorAll('input').forEach(i=>{if(i.dataset.touched)return;const x=a[+i.dataset.i];k++;i.value=t?(a.length===1?t:t+' - '+(+i.dataset.seq))+ex(x.name):x.name});}
+function build(){const a=[...fi.files];document.getElementById('amdrop').innerHTML=a.length?'<b>'+a.length+(a.length===1?' file':' files')+' selected</b>Tap to change':'Tap to choose photos or files';
+ let seq=0;rows.innerHTML=a.map((x,i)=>{if(!gib(x.name))return '<div class="rw"><div class="ok">'+eh(x.name)+'</div><span class="tg">name kept</span></div>';seq++;
+  return '<div class="rw"><s>'+eh(x.name)+'</s><input type="text" maxlength="100" data-i="'+i+'" data-seq="'+(a.length===1?0:i+1)+'" aria-label="New name for '+eh(x.name)+'"><span class="tg">renamed</span></div>'}).join('');
+ rows.querySelectorAll('input').forEach(i=>i.oninput=()=>{i.dataset.touched=1});sug()}
+fi.onchange=build;ti.addEventListener('input',sug);
 function say(t,c){m.textContent=t;m.className='msg '+(c||'')}
 const MAXN=10,TOT=30*1024*1024;
 f.addEventListener('submit',async e=>{e.preventDefault();const n=document.getElementById('amn').value.trim(),p=document.getElementById('amp').value,files=[...fi.files];
 if(!n)return say('Enter your name.','err');const t=document.getElementById('amt').value.replace(/[^\w.\- ()]/g,' ').replace(/\s+/g,' ').trim().slice(0,80);if(!t)return say('Enter a material name.','err');if(!files.length)return say('Choose at least one file.','err');if(files.length>MAXN)return say('Up to '+MAXN+' files at a time.','err');
+const ri={};rows.querySelectorAll('input').forEach(i=>{ri[i.dataset.i]=i.value});
+for(let q=0;q<files.length;q++){if(ri[q]!==undefined){const nn=clean(ri[q]);if(!nn)return say('File name cannot be empty.','err');if(ex(nn)!==ex(files[q].name))return say('Keep the file type: '+ex(files[q].name),'err');files[q]=new File([files[q]],nn,{type:files[q].type})}}
 const bad=files.find(x=>!OK.test(x.name));if(bad)return say(bad.name+': file type not allowed.','err');const big=files.find(x=>x.size>MAX);if(big)return say(big.name+' is over 10 MB.','err');
 if(files.reduce((s,x)=>s+x.size,0)>TOT)return say('Total is over 30 MB. Upload in smaller batches.','err');if(!p)return say('Enter the password.','err');
 go.disabled=true;let done=0;const gid=Array.from(crypto.getRandomValues(new Uint8Array(12)),b=>(b%36).toString(36)).join('');const fails=[];
@@ -285,7 +327,7 @@ if(r.status===401){say(done?'Wrong password. '+done+' uploaded before that.':'Wr
 if(r.ok){done++;if(window.libAdd)window.libAdd({id:j.id,name:n,title:t,group:gid,file:file.name,ts:Date.now()})}else fails.push(file.name+': '+(j.error||'failed'))}catch(x){fails.push(file.name+': no connection')}}
 go.disabled=false;
 if(fails.length)return say((done?done+' uploaded. ':'')+'Failed: '+fails.join('; '),'err');
-say(done===1?'Uploaded. It is in the list now.':done+' files uploaded. They are in the list now.','ok');f.reset();document.getElementById('amdrop').textContent='Tap to choose photos or files';setTimeout(()=>d.close(),1800)})})();
+say(done===1?'Uploaded. It is in the list now.':done+' files uploaded. They are in the list now.','ok');f.reset();rows.innerHTML='';document.getElementById('amdrop').textContent='Tap to choose photos or files';setTimeout(()=>d.close(),1800)})})();
 </script><dialog id="dm"><form method="dialog" id="dmf" novalidate><h3>Delete material</h3><p class="hint dtitle"></p>
 <label for="dmp">Class password</label><input id="dmp" type="password" autocomplete="off" required>
 <div class="msg" id="dmmsg" role="status"></div>
@@ -297,6 +339,25 @@ document.getElementById('dmf').addEventListener('submit',async e=>{e.preventDefa
 const x=window._ldocs&&0;go.disabled=true;m.className='msg';m.textContent='Deleting...';
 try{const ids=(window.libIds?window.libIds(g):[]).join(',');const fd=new FormData();fd.append('password',p);fd.append('ids',ids);const r=await fetch(API+'/delete',{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
 if(r.status===401){m.textContent='Wrong password. Nothing was deleted.';m.className='msg err'}else if(r.ok){window.libGone(g);d.close()}else{m.textContent=j.error||'Delete failed. Try again.';m.className='msg err'}}catch(x){m.textContent='No connection. Try again.';m.className='msg err'}go.disabled=false})})();
+</script>
+<dialog id="rm"><form method="dialog" id="rmf" novalidate><h3>Rename material</h3><p class="hint">Change the material name or any file name. The file type stays the same.</p>
+<label for="rmt">Material name</label><input id="rmt" type="text" maxlength="80" required>
+<div id="rmfiles"></div>
+<label for="rmp">Class password</label><input id="rmp" type="password" autocomplete="off" required>
+<div class="msg" id="rmmsg" role="status"></div>
+<div class="acts"><button type="button" id="rmcancel">Cancel</button><button type="submit" class="go" id="rmgo">Save</button></div></form></dialog>
+<script>
+(function(){const API='https://dpspr-upload.abhijitswain0x0.workers.dev';const d=document.getElementById('rm'),m=document.getElementById('rmmsg'),go=document.getElementById('rmgo');
+document.getElementById('rmcancel').onclick=()=>d.close();d.addEventListener('click',e=>{if(e.target===d)d.close()});
+const say=(t,c)=>{m.textContent=t;m.className='msg '+(c||'')};
+document.getElementById('rmf').addEventListener('submit',async e=>{e.preventDefault();const p=document.getElementById('rmp').value,g=d.dataset.gid;
+const title=document.getElementById('rmt').value.replace(/[^\w.\- ()]/g,' ').replace(/\s+/g,' ').trim().slice(0,80);if(!title)return say('Enter a material name.','err');
+const ins=[...d.querySelectorAll('#rmfiles input')];const map={};for(const i of ins){const v=i.value.replace(/[^\w.\- ()]/g,' ').replace(/\s+/g,' ').trim();if(!v)return say('File name cannot be empty.','err');
+ if(v!==i.dataset.o){const x=s=>(s.split('.').pop()||'').toLowerCase();if(x(v)!==x(i.dataset.o))return say('Keep the file type: .'+x(i.dataset.o),'err');map[i.dataset.id]=v}}
+if(!p)return say('Enter the password.','err');go.disabled=true;say('Saving...');
+try{const fd=new FormData();fd.append('password',p);fd.append('ids',window.libIds(g).join(','));fd.append('title',title);fd.append('files',JSON.stringify(map));
+const r=await fetch(API+'/rename',{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
+if(r.status===401)say('Wrong password. Nothing was changed.','err');else if(r.ok){window.libRenamed(g,title,map);d.close()}else say(j.error||'Rename failed. Try again.','err')}catch(x){say('No connection. Try again.','err')}go.disabled=false})})();
 </script>
 <dialog id="vw"><div class="vh"><b id="vt"></b><span class="vs"><a id="vo" target="_blank" rel="noopener">Open raw</a><button type="button" id="vx" aria-label="Close">Close</button></span></div><div id="vb"></div></dialog>
 <script>
