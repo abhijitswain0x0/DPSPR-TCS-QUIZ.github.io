@@ -1,35 +1,47 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TCS InQuizitive Study Hub</title>
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23007aff'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='white' font-family='Arial' font-weight='700'%3E%3F%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website"><meta property="og:site_name" content="TCS InQuizitive Study Hub"><meta property="og:title" content="TCS InQuizitive Study Hub"><meta property="og:description" content="Practice quiz, 5 sample tests, study notes and 120 past round recordings for TCS InQuizitive.">
+<meta property="og:url" content="https://abhijitswain0x0.github.io/DPSPR-TCS-QUIZ.github.io/"><meta property="og:image" content="https://abhijitswain0x0.github.io/DPSPR-TCS-QUIZ.github.io/og.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="TCS InQuizitive Study Hub">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="TCS InQuizitive Study Hub"><meta name="twitter:description" content="Practice quiz, 5 sample tests, study notes and 120 past round recordings."><meta name="twitter:image" content="https://abhijitswain0x0.github.io/DPSPR-TCS-QUIZ.github.io/og.png">
+
 <meta name="description" content="Study material for TCS InQuizitive: practice quiz and past round recordings, grouped by year.">
 <style>
-:root{--bg:#fff;--card:#fff;--fg:#333737;--mut:#747678;--acc:#1f66c1;--bd:#e3e4e6;--blk:#000}
-*{box-sizing:border-box}body{margin:0;font:16px/1.6 "Helvetica Neue",Arial,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#f4f4f5;color:var(--fg)}
-.top{background:#000;color:#fff;padding:0}.top .in{max-width:860px;margin:0 auto;padding:22px 18px 34px}
-.brand{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#9e9fa3;border-bottom:1px solid #333;padding-bottom:10px;margin-bottom:26px}
-h1{font-size:2.3rem;line-height:1.15;margin:0 0 .3em;font-weight:500;color:#fff}h2{font-size:1.35rem;margin:0 0 .6em;font-weight:500;color:#000}
-.top .sub{color:#c9cacd;margin:0}.sub{color:var(--mut);margin:0 0 1.2em}
-main{max-width:860px;margin:0 auto;padding:20px 16px 60px}
-section,.box{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:20px 22px;margin:16px 0}
+:root{color-scheme:light dark;--bg:#f2f2f7;--card:#fff;--fg:#1c1c1e;--mut:#6e6e73;--acc:#007aff;--bd:rgba(60,60,67,.14);--fill:rgba(120,120,128,.12);--ok:#34c759;--okbg:rgba(52,199,89,.14);--bad:#ff3b30;--badbg:rgba(255,59,48,.12);--glass:rgba(242,242,247,.78)}
+@media(prefers-color-scheme:dark){:root{--bg:#000;--card:#1c1c1e;--fg:#f5f5f7;--mut:#98989d;--acc:#0a84ff;--bd:rgba(84,84,88,.5);--fill:rgba(120,120,128,.24);--ok:#30d158;--okbg:rgba(48,209,88,.18);--bad:#ff453a;--badbg:rgba(255,69,58,.18);--glass:rgba(0,0,0,.72)}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;font:17px/1.47 -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",system-ui,Arial,sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased}
+.top{padding:56px 20px 8px;text-align:left}.top .in{max-width:720px;margin:0 auto}
+.brand{font-size:.8rem;font-weight:600;letter-spacing:.02em;color:var(--acc);margin-bottom:6px;text-transform:none;border:0;padding:0}
+h1{font-size:2.35rem;line-height:1.1;margin:0 0 .3em;font-weight:700;letter-spacing:-.022em;color:var(--fg)}
+h2{font-size:1.4rem;line-height:1.2;margin:0 0 .6em;font-weight:600;letter-spacing:-.015em;color:var(--fg)}
+.top .sub,.sub{color:var(--mut);margin:0 0 1em;font-size:1.05rem}
+main{max-width:720px;margin:0 auto;padding:12px 16px 72px}
+section,.box{background:var(--card);border-radius:20px;padding:24px 22px;margin:18px 0;border:0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
 a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
-nav{position:sticky;top:0;background:#f4f4f5;padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;z-index:2}
-nav a{border:1px solid #c9cacd;border-radius:99px;padding:3px 14px;background:#fff;font-size:.9rem;color:#333737}
-.count{font-size:.8rem;color:var(--mut);font-weight:400;margin-left:8px}
-.tag{font-size:.7rem;background:#000;color:#fff;border-radius:99px;padding:2px 10px;margin-left:8px;vertical-align:middle;letter-spacing:.05em}
-ul{padding-left:20px;margin:.4em 0}li{margin:.3em 0}
-.note,.warn{color:var(--mut);font-size:.92rem}
-.warn{border-left:3px solid #000;padding:2px 0 2px 12px;background:#fff;margin:16px 0}
-.btn,.pill{display:inline-block;background:#747678;color:#fff;padding:10px 22px;border-radius:99px;border:0;font:inherit;font-weight:500;letter-spacing:.03em;cursor:pointer}
-.btn:hover,.pill:hover{background:#000;text-decoration:none}.pill.blue{background:var(--acc)}.pill:disabled{opacity:.4;cursor:default}
-input[type=search]{width:100%;padding:11px 16px;border-radius:99px;border:1px solid #c9cacd;background:#fff;color:var(--fg);font-size:1rem;margin-top:8px}
-footer{color:var(--mut);font-size:.85rem;margin-top:30px}
-.qwrap .step{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
-.qwrap .qt{font-size:1.15rem;font-weight:500;color:#000;margin:0 0 14px}
-.opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid #c9cacd;border-radius:12px;padding:12px 16px;margin:8px 0;font:inherit;color:var(--fg);cursor:pointer}
-.opt:hover{border-color:#000}.opt.sel{border-color:#000;box-shadow:inset 0 0 0 1px #000}
-.opt.ok{border-color:#1b8a3a;background:#eaf6ee;box-shadow:inset 0 0 0 1px #1b8a3a}.opt.bad{border-color:#c0392b;background:#fbeceb;box-shadow:inset 0 0 0 1px #c0392b}
-.bar{height:4px;background:#e3e4e6;border-radius:4px;margin:0 0 18px}.bar i{display:block;height:4px;background:#000;border-radius:4px;width:0;transition:width .3s}
-.row{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}.tab{border:1px solid #c9cacd;background:#fff;border-radius:99px;padding:6px 14px;font:inherit;font-size:.9rem;cursor:pointer;color:#333737}.tab.on{background:#000;color:#fff;border-color:#000}details{border:1px solid var(--bd);border-radius:12px;padding:10px 16px;margin:8px 0}summary{cursor:pointer;font-weight:500;color:#000}.res{font-size:2.4rem;font-weight:500;color:#000}
-</style></head><body><header class="top"><div class="in"><div class="brand">TCS InQuizitive &middot; Study Hub</div><h1>TCS InQuizitive Study Hub</h1><p class="sub">Everything TCS publishes that you can study from, in one place. 120 recordings, a practice quiz, and the rules.</p></div></header>
+nav{position:sticky;top:0;background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);padding:10px 4px;display:flex;gap:8px;flex-wrap:wrap;z-index:2;margin:0 -4px}
+nav a,.tab{border:0;border-radius:99px;padding:6px 14px;background:var(--fill);font-size:.9rem;color:var(--fg);font-weight:500}
+.count{font-size:.85rem;color:var(--mut);font-weight:400;margin-left:8px}
+.tag{font-size:.7rem;background:var(--fill);color:var(--mut);border-radius:99px;padding:2px 10px;margin-left:8px;vertical-align:middle;font-weight:600}
+ul{padding-left:20px;margin:.4em 0}li{margin:.4em 0}
+.note,.warn{color:var(--mut);font-size:.95rem}
+.btn,.pill{display:inline-block;background:var(--acc);color:#fff;padding:11px 22px;border-radius:99px;border:0;font:inherit;font-weight:600;cursor:pointer}
+.btn:hover,.pill:hover{text-decoration:none;filter:brightness(1.08)}.pill.blue{background:var(--acc)}.pill:disabled{background:var(--fill);color:var(--mut);cursor:default;filter:none}
+input[type=search]{width:100%;padding:11px 16px;border-radius:12px;border:0;background:var(--fill);color:var(--fg);font:inherit;margin-top:8px;outline:none}
+footer{color:var(--mut);font-size:.85rem;margin-top:30px;text-align:center}
+.qwrap .step{font-size:.8rem;font-weight:600;color:var(--mut);margin-bottom:6px}
+.qwrap .qt{font-size:1.2rem;font-weight:600;line-height:1.3;color:var(--fg);margin:0 0 16px;letter-spacing:-.01em}
+.opt{display:block;width:100%;text-align:left;background:var(--fill);border:2px solid transparent;border-radius:14px;padding:14px 16px;margin:8px 0;font:inherit;color:var(--fg);cursor:pointer;transition:background .15s}
+.opt:hover{background:rgba(120,120,128,.2)}.opt.sel{border-color:var(--acc);background:transparent}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}.opt.bad{border-color:var(--bad);background:var(--badbg)}
+.bar{height:4px;background:var(--fill);border-radius:4px;margin:0 0 20px}.bar i{display:block;height:4px;background:var(--acc);border-radius:4px;width:0;transition:width .3s}
+.row{display:flex;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 20px}.tab{font:inherit;font-size:.9rem;cursor:pointer}.tab.on{background:var(--acc);color:#fff}
+details{background:var(--fill);border-radius:14px;padding:12px 16px;margin:8px 0}summary{cursor:pointer;font-weight:600}
+.res{font-size:2.6rem;font-weight:700;letter-spacing:-.02em}
+.vids{list-style:none;padding:0;margin:0}.vids li{padding:11px 0;border-top:1px solid var(--bd);margin:0}.vids li:first-child{border-top:0}
+@media(max-width:480px){h1{font-size:2rem}section{padding:20px 16px;border-radius:18px}}
+</style></head><body><header class="top"><div class="in"><div class="brand">Unofficial study page</div><h1>TCS InQuizitive Study Hub</h1><p class="sub">Everything TCS publishes that you can study from, in one place. 120 recordings, a practice quiz, and the rules.</p></div></header>
 <main>
 <section id="quiz"><h2>1. Practice quiz</h2>
 <p class="note">The same five questions as the official practice quiz on tcs.com/inquizitive, with answers taken from TCS's own page. It is small, not a full mock test.</p>
