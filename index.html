@@ -55,7 +55,28 @@ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-ri
 .docs .doc{flex-direction:column;align-items:stretch;gap:10px}.da{width:100%}.da .pill{flex:1}
 .row .pill{flex:1 1 auto}h1{font-size:1.9rem}.top{padding-top:40px}.res{font-size:2.2rem}}
 @media(max-width:480px){h1{font-size:2rem}section{padding:20px 16px;border-radius:18px}}
-</style></head><body><header class="top"><div class="in"><div class="brand">Unofficial study page</div><h1>TCS InQuizitive Study Hub</h1><p class="sub">Everything TCS publishes that you can study from, in one place. 120 recordings, a practice quiz, and the rules.</p></div></header>
+
+:root{--acc:#0a64d6;--bd:#e0e0e5;--card:#fff}@media(prefers-color-scheme:dark){:root{--acc:#4da3ff;--bd:#2e2e32;--card:#1c1c1e}}
+.top{padding:0;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:4}.top .in{max-width:720px;margin:0 auto;padding:10px 16px 0}
+.brand{font-size:1rem;font-weight:600;color:var(--fg);display:flex;justify-content:space-between;align-items:baseline;gap:10px}.brand span{font-size:.78rem;color:var(--mut);font-weight:400;white-space:nowrap}
+.snav{display:flex;gap:2px;overflow-x:auto;margin:4px -8px 0;padding:0 4px;scrollbar-width:none}.snav::-webkit-scrollbar{display:none}
+.snav a{flex:0 0 auto;padding:10px 10px;font-size:.9rem;color:var(--mut);border-bottom:2px solid transparent;font-weight:500}.snav a:hover{text-decoration:none;color:var(--fg)}.snav a.on{color:var(--acc);border-color:var(--acc);font-weight:600}
+main{padding-top:8px}main>section{scroll-margin-top:96px}
+section,.box{border-radius:12px;border:1px solid var(--bd);box-shadow:none;padding:0;margin:10px 0}
+section>details.sec>summary{padding:12px 16px}section>details.sec>.body{padding:14px 16px 16px;border-top:1px solid var(--bd)}
+section#social{padding:14px 16px}section#social h2{font-size:1.05rem;margin:0 0 .3em}
+#recsec section{padding:12px 16px;border:0;border-radius:10px;background:var(--fill);margin:10px 0}
+#recsec nav{background:var(--card);backdrop-filter:none;-webkit-backdrop-filter:none;top:88px;border-bottom:1px solid var(--bd);border-radius:0}
+nav a,.tab{border-radius:8px;background:none;border:1px solid var(--bd);min-height:40px}.tab.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.pill,.btn{border-radius:10px}.pill.gray{background:none;border:1px solid var(--bd)}.pill.sm{min-height:40px}
+.opt{border:1px solid var(--bd);background:transparent;border-radius:10px}.opt:hover{background:var(--fill)}.opt.sel{border-color:var(--acc);background:var(--fill)}.opt.ok,.opt.bad{border-width:2px}
+input[type=search]{background:transparent;border:1px solid var(--bd);border-radius:10px}.lbar select{background:transparent;border:1px solid var(--bd);border-radius:8px}
+.tag{border-radius:5px;background:none;border:1px solid var(--bd);font-weight:500}.dt .meta i{border-radius:5px;background:none;border:1px solid var(--bd);font-weight:500}
+h2{font-size:1.1rem;letter-spacing:0}summary h2{font-size:1.05rem}.bar{background:var(--bd)}
+
+.note a,.sub a{display:inline;padding:2px 0}
+@media(max-width:560px){.snav{margin:4px -16px 0;padding:0 8px}#recsec nav{margin:0 -16px;top:88px}section>details.sec>.body{padding:12px 14px 14px}}
+</style></head><body><header class="top"><div class="in"><div class="brand">TCS InQuizitive Study Hub <span>Unofficial, by students</span></div><div class="snav" id="snav"><a href="#quiz">Practice</a><a href="#tests">Tests</a><a href="#notesec">Material</a><a href="#guide">Study</a><a href="#rules">Rules</a><a href="#recsec">Recordings</a></div></div></header>
 <main>
 <section id="quiz"><details class="sec" open><summary><h2>1. Practice quiz</h2></summary><div class="body">
 <p class="note">The same five questions as the official practice quiz on tcs.com/inquizitive, with answers taken from TCS's own page. It is small, not a full mock test.</p>
@@ -64,7 +85,7 @@ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-ri
 <section id="tests"><details class="sec" open><summary><h2>2. Sample tests <span class="tag">Our own</span></h2></summary><div class="body">
 <p class="note">Five practice tests with 10 questions each, written by us from well-known facts. They are not TCS questions and not official past papers. Use them to warm up.</p>
 <div class="tabs" id="tests-tabs"></div><div class="qwrap" id="tz"></div></div></details></section>
-<section id="notesec"><details class="sec"><summary><h2>3. Additional Material <span class="tag">Our own</span></h2></summary><div class="body">
+<section id="notesec"><details class="sec" open><summary><h2>3. Additional Material <span class="tag">Our own</span></h2></summary><div class="body">
 <p class="note">Five short study notes. Search, filter by subject, then read a note here or download it as a PDF. Our own summaries, not from TCS.</p>
 <div class="lib"><input id="lq" type="search" placeholder="Search notes" aria-label="Search notes"><div class="tabs" id="lchips"></div>
 <div class="lbar"><span id="lcount" class="note"></span><label class="note">Sort <select id="lsort"><option value="new">Newest</option><option value="az">A to Z</option></select></label></div>
@@ -181,6 +202,9 @@ document.querySelectorAll('details.sec').forEach(d=>{const s=d.querySelector('su
 function openHash(){const t=location.hash&&document.querySelector(location.hash);if(t){const d=t.querySelector('details.sec');if(d&&!d.open)d.open=true;setTimeout(()=>t.scrollIntoView(),50)}}
 addEventListener('hashchange',openHash);openHash();
 document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('#recsec details').open=true}));
+(function(){const L=[...document.querySelectorAll('#snav a')];const S=L.map(a=>document.querySelector(a.getAttribute('href')));
+function mark(){let k=0;S.forEach((s,i)=>{if(s.getBoundingClientRect().top<130)k=i});L.forEach((a,i)=>a.classList.toggle('on',i===k));const on=L[k];if(on&&on.scrollIntoView&&on.offsetParent){const p=on.parentElement;p.scrollLeft=on.offsetLeft-p.clientWidth/2+on.clientWidth/2}}
+addEventListener('scroll',mark,{passive:true});mark()})();
 
 (function(){const D=window.DOCS||[];if(!document.getElementById('ldocs'))return;
  const q=document.getElementById('lq'),ch=document.getElementById('lchips'),box=document.getElementById('ldocs'),cnt=document.getElementById('lcount'),srt=document.getElementById('lsort'),more=document.getElementById('lmore'),em=document.getElementById('lempty');
