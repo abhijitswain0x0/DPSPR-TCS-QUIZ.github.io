@@ -307,7 +307,7 @@ const rows=document.getElementById('amrows'),ti=document.getElementById('amt');
 const clean=s=>s.replace(/[^\w.\- ()]/g,' ').replace(/\s+/g,' ').trim();
 function sug(){const a=[...fi.files],t=clean(ti.value);const g=a.filter(x=>gib(x.name));let k=0;
  rows.querySelectorAll('input').forEach(i=>{if(i.dataset.touched)return;const x=a[+i.dataset.i];k++;i.value=t?(a.length===1?t:t+' - '+(+i.dataset.seq))+ex(x.name):x.name});}
-function build(){const a=[...fi.files];document.getElementById('amdrop').innerHTML=a.length?'<b>'+a.length+(a.length===1?' file':' files')+' selected</b>Tap to change':'Tap to choose photos or files';
+function build(){const a=[...fi.files];document.getElementById('amdrop').innerHTML=a.length?'<b>'+a.length+(a.length===1?' file':' files')+' selected</b><small>Tap to change</small>':'Tap to choose photos or files';
  let seq=0;rows.innerHTML=a.map((x,i)=>{if(!gib(x.name))return '<div class="rw"><div class="ok">'+eh(x.name)+'</div><span class="tg">name kept</span></div>';seq++;
   return '<div class="rw"><s>'+eh(x.name)+'</s><input type="text" maxlength="100" data-i="'+i+'" data-seq="'+(a.length===1?0:i+1)+'" aria-label="New name for '+eh(x.name)+'"><span class="tg">renamed</span></div>'}).join('');
  rows.querySelectorAll('input').forEach(i=>i.oninput=()=>{i.dataset.touched=1});sug()}
