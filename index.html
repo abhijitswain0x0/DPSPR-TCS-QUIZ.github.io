@@ -44,6 +44,7 @@ section>details.sec{margin:0;padding:0;background:none;border-radius:0}
 #recsec section{box-shadow:none;background:var(--fill);padding:16px 18px;border-radius:16px;margin:12px 0}#recsec nav{background:var(--card)}
 @media(prefers-reduced-motion:reduce){summary::after{transition:none}}
 details{background:var(--fill);border-radius:14px;padding:12px 16px;margin:8px 0}summary{cursor:pointer;font-weight:600}
+.lbar{display:flex;justify-content:space-between;align-items:center;margin:4px 0 6px;gap:10px}.lbar select{font:inherit;font-size:.9rem;border:0;background:var(--fill);color:var(--fg);border-radius:10px;padding:6px 10px;margin-left:6px}.dt .meta{display:flex;gap:8px;align-items:center;margin-top:3px;font-size:.82rem;color:var(--mut)}.dt .meta i{font-style:normal;background:var(--fill);border-radius:99px;padding:1px 9px;font-weight:600}.lib .tabs{margin:10px 0 8px}
 .docs .doc{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--bd);flex-wrap:wrap}.docs .doc:first-child{border-top:0}.dt{display:flex;flex-direction:column}.dt span{color:var(--mut);font-size:.95rem}.da{display:flex;gap:8px}.pill.sm{padding:7px 16px;font-size:.9rem}.pill.gray{background:var(--fill);color:var(--acc)}.res{font-size:2.6rem;font-weight:700;letter-spacing:-.02em}
 .vids{list-style:none;padding:0;margin:0}.vids li{padding:11px 0;border-top:1px solid var(--bd);margin:0}.vids li:first-child{border-top:0}
 nav a,.tab{min-height:44px;display:inline-flex;align-items:center}.pill,.opt{min-height:44px}.pill.sm{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
@@ -64,8 +65,10 @@ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-ri
 <p class="note">Five practice tests with 10 questions each, written by us from well-known facts. They are not TCS questions and not official past papers. Use them to warm up.</p>
 <div class="tabs" id="tests-tabs"></div><div class="qwrap" id="tz"></div></div></details></section>
 <section id="notesec"><details class="sec"><summary><h2>3. Additional Material <span class="tag">Our own</span></h2></summary><div class="body">
-<p class="note">Five short study notes. Open one to read it here, or download it as a PDF. Our own summaries, not from TCS.</p>
-<div class="docs"><div class="doc"><div class="dt"><b>Note 1</b><span>Science: names and firsts</span></div><div class="da"><a class="pill sm" href="note-1.html">View</a><a class="pill sm gray" href="note-1.pdf" download>Download</a></div></div><div class="doc"><div class="dt"><b>Note 2</b><span>Computing and space</span></div><div class="da"><a class="pill sm" href="note-2.html">View</a><a class="pill sm gray" href="note-2.pdf" download>Download</a></div></div><div class="doc"><div class="dt"><b>Note 3</b><span>Engineering marvels and engineers</span></div><div class="da"><a class="pill sm" href="note-3.html">View</a><a class="pill sm gray" href="note-3.pdf" download>Download</a></div></div><div class="doc"><div class="dt"><b>Note 4</b><span>Sports firsts and records</span></div><div class="da"><a class="pill sm" href="note-4.html">View</a><a class="pill sm gray" href="note-4.pdf" download>Download</a></div></div><div class="doc"><div class="dt"><b>Note 5</b><span>Math and art</span></div><div class="da"><a class="pill sm" href="note-5.html">View</a><a class="pill sm gray" href="note-5.pdf" download>Download</a></div></div></div></div></details></section>
+<p class="note">Five short study notes. Search, filter by subject, then read a note here or download it as a PDF. Our own summaries, not from TCS.</p>
+<div class="lib"><input id="lq" type="search" placeholder="Search notes" aria-label="Search notes"><div class="tabs" id="lchips"></div>
+<div class="lbar"><span id="lcount" class="note"></span><label class="note">Sort <select id="lsort"><option value="new">Newest</option><option value="az">A to Z</option></select></label></div>
+<div class="docs" id="ldocs"></div><div class="row"><button class="pill gray" id="lmore" style="display:none"></button></div><p class="note" id="lempty" style="display:none">No notes match. <a href="#" id="lclear">Clear filters</a></p></div><script>window.DOCS=[{"n": 1, "title": "Science: names and firsts", "subject": "Science", "added": "2026-10-11", "points": 7}, {"n": 2, "title": "Computing and space", "subject": "Technology", "added": "2026-10-11", "points": 7}, {"n": 3, "title": "Engineering marvels and engineers", "subject": "Engineering", "added": "2026-10-11", "points": 7}, {"n": 4, "title": "Sports firsts and records", "subject": "Sports", "added": "2026-10-11", "points": 7}, {"n": 5, "title": "Math and art", "subject": "Math & Art", "added": "2026-10-11", "points": 7}];</script></div></details></section>
 <section id="guide"><details class="sec"><summary><h2>4. What to study</h2></summary><div class="body">
 <p>TCS describes the quiz as technological developments across science, sports, engineering, mathematics and art. That is broad guidance, not a syllabus. Read widely, and watch the 2025 and 2024 finals first to see how questions are framed and how the buzzer rounds run.</p></div></details></section>
 <section id="rules"><details class="sec"><summary><h2>5. Rules and format</h2></summary><div class="body">
@@ -178,5 +181,22 @@ document.querySelectorAll('details.sec').forEach(d=>{const s=d.querySelector('su
 function openHash(){const t=location.hash&&document.querySelector(location.hash);if(t){const d=t.querySelector('details.sec');if(d&&!d.open)d.open=true;setTimeout(()=>t.scrollIntoView(),50)}}
 addEventListener('hashchange',openHash);openHash();
 document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('#recsec details').open=true}));
+
+(function(){const D=window.DOCS||[];if(!document.getElementById('ldocs'))return;
+ const q=document.getElementById('lq'),ch=document.getElementById('lchips'),box=document.getElementById('ldocs'),cnt=document.getElementById('lcount'),srt=document.getElementById('lsort'),more=document.getElementById('lmore'),em=document.getElementById('lempty');
+ const PAGE=8;let subj='All',shown=PAGE;
+ const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+ const subjects=['All',...[...new Set(D.map(d=>d.subject))].sort()];
+ function chips(){ch.innerHTML=subjects.map(s=>'<button class="tab'+(s===subj?' on':'')+'" data-s="'+esc(s)+'">'+esc(s)+' <small>'+(s==='All'?D.length:D.filter(d=>d.subject===s).length)+'</small></button>').join('');
+  ch.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{subj=b.dataset.s;shown=PAGE;chips();draw()})}
+ function list(){const t=q.value.trim().toLowerCase();let r=D.filter(d=>(subj==='All'||d.subject===subj)&&(!t||(d.title+' '+d.subject).toLowerCase().includes(t)));
+  r.sort(srt.value==='az'?(a,b)=>a.title.localeCompare(b.title):(a,b)=>b.added.localeCompare(a.added)||b.n-a.n);return r}
+ function draw(){const r=list(),v=r.slice(0,shown);
+  box.innerHTML=v.map(d=>'<div class="doc"><div class="dt"><b>'+esc(d.title)+'</b><span class="meta"><i>'+esc(d.subject)+'</i>'+d.points+' key points</span></div><div class="da"><a class="pill sm" href="note-'+d.n+'.html">View</a><a class="pill sm gray" href="note-'+d.n+'.pdf" download>Download</a></div></div>').join('');
+  cnt.textContent=r.length===D.length?D.length+' notes':r.length+' of '+D.length+' notes';
+  em.style.display=r.length?'none':'';more.style.display=r.length>shown?'':'none';more.textContent='Show more ('+(r.length-shown)+')'}
+ q.addEventListener('input',()=>{shown=PAGE;draw()});srt.onchange=()=>{shown=PAGE;draw()};more.onclick=()=>{shown+=PAGE;draw()};
+ document.getElementById('lclear').onclick=e=>{e.preventDefault();q.value='';subj='All';shown=PAGE;chips();draw()};
+ chips();draw()})();
 
 </script></body></html>
