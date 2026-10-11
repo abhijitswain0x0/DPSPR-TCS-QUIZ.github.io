@@ -28,7 +28,7 @@ footer{color:var(--mut);font-size:.85rem;margin-top:30px}
 .opt.ok{border-color:#1b8a3a;background:#eaf6ee;box-shadow:inset 0 0 0 1px #1b8a3a}.opt.bad{border-color:#c0392b;background:#fbeceb;box-shadow:inset 0 0 0 1px #c0392b}
 .bar{height:4px;background:#e3e4e6;border-radius:4px;margin:0 0 18px}.bar i{display:block;height:4px;background:#000;border-radius:4px;width:0;transition:width .3s}
 .row{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
-.res{font-size:2.4rem;font-weight:500;color:#000}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}.tab{border:1px solid #c9cacd;background:#fff;border-radius:99px;padding:6px 14px;font:inherit;font-size:.9rem;cursor:pointer;color:#333737}.tab.on{background:#000;color:#fff;border-color:#000}details{border:1px solid var(--bd);border-radius:12px;padding:10px 16px;margin:8px 0}summary{cursor:pointer;font-weight:500;color:#000}.res{font-size:2.4rem;font-weight:500;color:#000}
 </style></head><body><header class="top"><div class="in"><div class="brand">TCS InQuizitive &middot; Study Hub</div><h1>TCS InQuizitive Study Hub</h1><p class="sub">Everything TCS publishes that you can study from, in one place. 120 recordings, a practice quiz, and the rules.</p></div></header>
 <main>
 <div class="warn"><b>Heads up:</b> there are no sample papers, answer-key PDFs, fixed syllabus or study pack on the TCS site. The PDFs there are press clippings. The best prep is the practice quiz and watching past rounds to see what gets asked.</div>
@@ -36,12 +36,17 @@ footer{color:var(--mut);font-size:.85rem;margin-top:30px}
 <p class="note">The same five questions as the official practice quiz on tcs.com/inquizitive, with answers taken from TCS's own page. It is small, not a full mock test.</p>
 <div class="qwrap" id="qz"></div>
 <p class="note" style="margin-top:16px">Prefer the original? <a href="https://www.tcs.com/inquizitive" target="_blank" rel="noopener">Open it on tcs.com</a> and scroll down about 5 screens to the section "Get InQuizitive. Test your knowledge." (the page cannot jump there on its own).</p></section>
-<section id="guide"><h2>2. What to study</h2>
+<section id="tests"><h2>2. Sample tests <span class="tag">Our own</span></h2>
+<p class="note">Five practice tests with 10 questions each, written by us from well-known facts. They are not TCS questions and not official past papers. Use them to warm up.</p>
+<div class="tabs" id="tests-tabs"></div><div class="qwrap" id="tz"></div></section>
+<section id="notesec"><h2>3. Study notes <span class="tag">Our own</span></h2>
+<p class="note">Short notes on topics that often come up in quizzes like this. Our own summary, not from TCS.</p><div id="notes"></div></section>
+<section id="guide"><h2>4. What to study</h2>
 <p>TCS describes the quiz as technological developments across science, sports, engineering, mathematics and art. That is broad guidance, not a syllabus. Read widely, and watch the 2025 and 2024 finals first to see how questions are framed and how the buzzer rounds run.</p></section>
-<section id="rules"><h2>3. Rules and format</h2>
+<section id="rules"><h2>5. Rules and format</h2>
 <p>Eligibility, rounds and dates are on the official registration page. Check it for the current season.</p>
 <a href="https://www.tcs.com/inquizitive/registration" target="_blank" rel="noopener">tcs.com/inquizitive/registration</a></section>
-<h2 style="margin-top:28px">4. Past round recordings</h2>
+<h2 style="margin-top:28px">6. Past round recordings</h2>
 <p class="sub">Newest first. Official archive pages: <a href="https://www.tcs.com/inquizitive/event/2026" target="_blank" rel="noopener">2026</a> <a href="https://www.tcs.com/inquizitive/event/2025" target="_blank" rel="noopener">2025</a> <a href="https://www.tcs.com/inquizitive/event/2024" target="_blank" rel="noopener">2024</a> <a href="https://www.tcs.com/inquizitive/event/2023" target="_blank" rel="noopener">2023</a> <a href="https://www.tcs.com/inquizitive/event/2022" target="_blank" rel="noopener">2022</a> <a href="https://www.tcs.com/inquizitive/event/2021" target="_blank" rel="noopener">2021</a> <a href="https://www.tcs.com/inquizitive/event/2020" target="_blank" rel="noopener">2020</a></p>
 <input id="q" type="search" placeholder="Filter videos, e.g. Pune, National, Kochi" aria-label="Filter videos">
 <nav><a href="#y2026">2026</a><a href="#y2025">2025</a><a href="#y2024">2024</a><a href="#y2023">2023</a><a href="#y2022">2022</a><a href="#y2021">2021</a><a href="#y2020">2020</a></nav>
@@ -53,23 +58,94 @@ footer{color:var(--mut);font-size:.85rem;margin-top:30px}
 <footer>Unofficial study page made by students. All links point to the official TCS site and its channels. Inventory checked 11 October 2026. Some external videos may stop playing over time.</footer>
 </main>
 <script>
-const QS=[["Who is the English surgeon who promoted use of phenol as an antiseptic, and is known as the 'Father of Modern Surgery'?",["Louis Pasteur","Joseph Lister","Joseph Bell","Hippocrates"],1],
+function mountQuiz(el,QS){
+ let qi=0,score=0,sel=-1,checked=false;
+ function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+ function render(){
+  if(qi>=QS.length){el.innerHTML='<div class="res">'+score+' / '+QS.length+'</div><p>'+(score==QS.length?'Perfect score.':score>=QS.length*0.7?'Good work. Review the ones you missed in the notes.':'Read the study notes below, then try again.')+'</p><button class="pill" id="rs">Try again</button>';el.querySelector('#rs').onclick=()=>{qi=0;score=0;sel=-1;checked=false;render()};return}
+  const q=QS[qi];
+  el.innerHTML='<div class="bar"><i style="width:'+(qi/QS.length*100)+'%"></i></div><div class="step">Question '+String(qi+1).padStart(2,'0')+' of '+QS.length+'</div><p class="qt">'+esc(q[0])+'</p>'+q[1].map((o,i)=>'<button class="opt" data-i="'+i+'">'+esc(o)+'</button>').join('')+'<div class="row"><button class="pill" id="chk" disabled>Check Answer</button><button class="pill blue" id="nx" style="display:none">'+(qi==QS.length-1?'See score':'Next')+'</button><span id="fb"></span></div>';
+  const opts=[...el.querySelectorAll('.opt')],chk=el.querySelector('#chk'),nx=el.querySelector('#nx'),fb=el.querySelector('#fb');
+  opts.forEach(b=>b.onclick=()=>{if(checked)return;sel=+b.dataset.i;opts.forEach(x=>x.classList.remove('sel'));b.classList.add('sel');chk.disabled=false});
+  chk.onclick=()=>{checked=true;chk.style.display='none';nx.style.display='';opts.forEach((b,i)=>{if(i==q[2])b.classList.add('ok');else if(i==sel)b.classList.add('bad')});if(sel==q[2]){score++;fb.textContent='Correct'}else fb.textContent='Correct answer: '+q[1][q[2]]};
+  nx.onclick=()=>{qi++;sel=-1;checked=false;render()};
+ }
+ render();
+}
+const PRACTICE=[["Who is the English surgeon who promoted use of phenol as an antiseptic, and is known as the 'Father of Modern Surgery'?",["Louis Pasteur","Joseph Lister","Joseph Bell","Hippocrates"],1],
 ["Kamala Sohonie held a satyagraha outside Sir CV Raman's office until he allowed her to become the first female researcher at ...?",["IISc","JNU","NCBS","IIT-Madras"],0],
 ["What is the name of the legendary engineer who has designed two monuments on both sides of the Atlantic Ocean?",["Franco Levi","Isambard Kingdom Brunel","Maurice Koechlin","Gustave Eiffel"],3],
 ["Which empire first built aqueducts to transport water for its citizens?",["Egyptian","Roman","Mayan","Ottoman"],1],
 ["What is the name of the stone which is essential to the stability of the arch?",["Capstone","Cornerstone","Keystone","Groinstone"],2]];
-let qi=0,score=0,sel=-1,checked=false;const qz=document.getElementById('qz');
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
-function render(){
- if(qi>=QS.length){qz.innerHTML='<div class="res">'+score+' / '+QS.length+'</div><p>'+(score==QS.length?'Perfect score.':'Watch the past finals to sharpen up.')+'</p><button class="pill" id="rs">Try again</button>';document.getElementById('rs').onclick=()=>{qi=0;score=0;sel=-1;checked=false;render()};return}
- const q=QS[qi];
- qz.innerHTML='<div class="bar"><i style="width:'+(qi/QS.length*100)+'%"></i></div><div class="step">Question '+String(qi+1).padStart(2,'0')+' of '+QS.length+'</div><p class="qt">'+esc(q[0])+'</p>'+q[1].map((o,i)=>'<button class="opt" data-i="'+i+'">'+esc(o)+'</button>').join('')+'<div class="row"><button class="pill" id="chk" disabled>Check Answer</button><button class="pill blue" id="nx" style="display:none">'+(qi==QS.length-1?'See score':'Next')+'</button><span id="fb"></span></div>';
- const opts=[...qz.querySelectorAll('.opt')],chk=document.getElementById('chk'),nx=document.getElementById('nx'),fb=document.getElementById('fb');
- opts.forEach(b=>b.onclick=()=>{if(checked)return;sel=+b.dataset.i;opts.forEach(x=>x.classList.remove('sel'));b.classList.add('sel');chk.disabled=false});
- chk.onclick=()=>{checked=true;chk.style.display='none';nx.style.display='';opts.forEach((b,i)=>{if(i==q[2])b.classList.add('ok');else if(i==sel)b.classList.add('bad')});if(sel==q[2]){score++;fb.textContent='Correct'}else fb.textContent='Correct answer: '+q[1][q[2]]};
- nx.onclick=()=>{qi++;sel=-1;checked=false;render()};
-}
-render();
+const TESTS=[
+{n:"Science",q:[
+["Which element has atomic number 1?",["Helium","Hydrogen","Lithium","Carbon"],1],
+["Which organelle is known as the powerhouse of the cell?",["Nucleus","Ribosome","Mitochondrion","Golgi body"],2],
+["Who formulated the three laws of motion?",["Isaac Newton","Albert Einstein","Galileo Galilei","Johannes Kepler"],0],
+["Who discovered penicillin in 1928?",["Louis Pasteur","Alexander Fleming","Robert Koch","Edward Jenner"],1],
+["Which gas do plants take in for photosynthesis?",["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],2],
+["The Chandrasekhar limit is named after which Indian-born astrophysicist?",["Homi Bhabha","Subrahmanyan Chandrasekhar","Meghnad Saha","Satyendra Nath Bose"],1],
+["What is the SI unit of force?",["Joule","Pascal","Watt","Newton"],3],
+["C. V. Raman won the Nobel Prize in Physics in 1930 for his work on what?",["Scattering of light","Radioactivity","The electron","Superconductivity"],0],
+["Who proposed the double helix structure of DNA in 1953?",["Mendel and Darwin","Watson and Crick","Curie and Becquerel","Hubble and Hawking"],1],
+["Roughly what is the speed of light in a vacuum?",["3 x 10^5 m/s","3 x 10^8 m/s","3 x 10^10 m/s","3 x 10^3 m/s"],1]]},
+{n:"Technology",q:[
+["Who invented the World Wide Web?",["Bill Gates","Steve Jobs","Tim Berners-Lee","Vint Cerf"],2],
+["What does HTTP stand for?",["HyperText Transfer Protocol","High Transfer Text Process","HyperLink Text Program","Host Transfer Tool Protocol"],0],
+["The ENIAC computer (1945) was built at which university?",["MIT","University of Pennsylvania","Harvard","Stanford"],1],
+["What is the decimal number 10 in binary?",["1001","1100","1010","1110"],2],
+["Who is often called the first computer programmer for her notes on Babbage's Analytical Engine?",["Grace Hopper","Ada Lovelace","Marie Curie","Hedy Lamarr"],1],
+["Who created the Linux kernel?",["Linus Torvalds","Dennis Ritchie","Richard Stallman","Ken Thompson"],0],
+["Which company develops the Android operating system today?",["Apple","Microsoft","Google","Samsung"],2],
+["Which Indian space agency launched the Chandrayaan missions?",["DRDO","ISRO","BARC","NASA"],1],
+["What does CPU stand for?",["Central Processing Unit","Computer Power Unit","Core Program Utility","Central Program Updater"],0],
+["Who created the Python programming language?",["James Gosling","Bjarne Stroustrup","Guido van Rossum","Brendan Eich"],2]]},
+{n:"Sports",q:[
+["How many players from one team are on the field in a cricket match?",["9","10","11","12"],2],
+["Who won India's first individual Olympic gold medal, in shooting at Beijing 2008?",["Rajyavardhan Rathore","Abhinav Bindra","Gagan Narang","Vijay Kumar"],1],
+["In which event did Neeraj Chopra win Olympic gold at the Tokyo Games?",["Discus throw","Shot put","Javelin throw","Long jump"],2],
+["Which country won the 2022 FIFA World Cup?",["France","Argentina","Brazil","Croatia"],1],
+["Where were the first modern Olympic Games held in 1896?",["Paris","London","Athens","Rome"],2],
+["How many rings are on the Olympic flag?",["4","5","6","7"],1],
+["Who captained India to the 1983 Cricket World Cup win?",["Sunil Gavaskar","Kapil Dev","Mohinder Amarnath","Bishan Singh Bedi"],1],
+["On which surface is the Wimbledon tennis championship played?",["Clay","Hard court","Grass","Carpet"],2],
+["Who is the only batter with 100 international centuries?",["Virat Kohli","Ricky Ponting","Sachin Tendulkar","Jacques Kallis"],2],
+["What is the official distance of a marathon?",["26.2 km","36.195 km","42.195 km","50 km"],2]]},
+{n:"Engineering",q:[
+["The Eiffel Tower was built for which event?",["1889 Exposition Universelle (World's Fair)","1900 Olympic Games","1851 Great Exhibition","1914 Peace Conference"],0],
+["Which suspension bridge in San Francisco is painted International Orange?",["Brooklyn Bridge","Golden Gate Bridge","Tower Bridge","Howrah Bridge"],1],
+["In a suspension bridge, the deck is mainly held up by what?",["Cables hung from towers","Rows of arches","Floating pontoons","Concrete walls"],0],
+["The Burj Khalifa is in which city?",["Doha","Riyadh","Dubai","Abu Dhabi"],2],
+["The Panama Canal connects which two oceans?",["Atlantic and Pacific","Indian and Pacific","Atlantic and Arctic","Indian and Atlantic"],0],
+["Engineers' Day in India honours which engineer?",["E. Sreedharan","M. Visvesvaraya","J. R. D. Tata","Homi Bhabha"],1],
+["Which law says stress is proportional to strain within the elastic limit?",["Ohm's law","Boyle's law","Hooke's law","Snell's law"],2],
+["Steel is an alloy of iron and mainly which other element?",["Carbon","Copper","Zinc","Silicon"],0],
+["The Three Gorges Dam is built on which river?",["Yellow River","Mekong","Yangtze","Ganges"],2],
+["What is the SI unit of electrical resistance?",["Volt","Ampere","Ohm","Farad"],2]]},
+{n:"Math & Art",q:[
+["Which value is closest to pi?",["3.14159","2.71828","1.61803","1.41421"],0],
+["Who proved Fermat's Last Theorem in the 1990s?",["Andrew Wiles","Terence Tao","Carl Gauss","Paul Erdos"],0],
+["Ramanujan's famous taxicab number is which?",["1729","1111","2048","1024"],0],
+["What is the sum of the angles of a triangle on a flat plane?",["90 degrees","180 degrees","270 degrees","360 degrees"],1],
+["Who painted the Mona Lisa?",["Michelangelo","Raphael","Leonardo da Vinci","Rembrandt"],2],
+["Who painted The Starry Night?",["Claude Monet","Vincent van Gogh","Paul Cezanne","Salvador Dali"],1],
+["Which Mughal emperor commissioned the Taj Mahal?",["Akbar","Shah Jahan","Aurangzeb","Humayun"],1],
+["Which artist painted Guernica?",["Pablo Picasso","Henri Matisse","Joan Miro","Frida Kahlo"],0],
+["Which Indian mathematician wrote early rules for arithmetic with zero in 628 CE?",["Brahmagupta","Bhaskara II","Aryabhata","Madhava"],0],
+["What is the smallest prime number?",["0","1","2","3"],2]]}
+];
+const NOTES=[
+["Science: names and firsts",["Joseph Lister used carbolic acid (phenol) as an antiseptic in surgery in the 1860s.","Alexander Fleming noticed penicillin in 1928.","Watson and Crick proposed the DNA double helix in 1953.","C. V. Raman found the Raman effect (scattering of light) in 1928 and won the 1930 Nobel Prize in Physics.","S. Chandrasekhar showed that white dwarfs above about 1.4 solar masses collapse. This is the Chandrasekhar limit. He shared the 1983 Nobel Prize in Physics.","Marie Curie won Nobel Prizes in two sciences: Physics (1903) and Chemistry (1911).","Kamala Sohonie became the first woman researcher at IISc after protesting outside C. V. Raman's office (this is the story in the TCS practice quiz)."]],
+["Computing and space",["Charles Babbage designed the Analytical Engine. Ada Lovelace wrote the first published algorithm for it.","Alan Turing described the universal machine in 1936 and proposed the Turing test in 1950.","ENIAC (1945, University of Pennsylvania) was an early general-purpose electronic computer.","The transistor was invented at Bell Labs in 1947.","Tim Berners-Lee invented the World Wide Web at CERN around 1989-91. The internet and the web are not the same thing.","Linus Torvalds started Linux in 1991. Guido van Rossum released Python in 1991.","ISRO: Aryabhata (1975, first Indian satellite), Chandrayaan-1 (2008), Mangalyaan (launched 2013), Chandrayaan-3 (soft landing near the Moon's south polar region, 23 August 2023)."]],
+["Engineering marvels and engineers",["Gustave Eiffel's company built the Eiffel Tower (1889) and designed the iron framework inside the Statue of Liberty. That is the two monuments on both sides of the Atlantic.","Isambard Kingdom Brunel: Great Western Railway, SS Great Britain, Clifton Suspension Bridge design.","M. Visvesvaraya: engineer and statesman, Krishna Raja Sagara dam in Mysore. Engineers' Day in India is on 15 September, his birthday.","Romans built aqueducts, bridges and arches at large scale. The Pont du Gard in France is a famous aqueduct.","In an arch, the keystone is the central wedge-shaped stone at the top that locks the arch in place.","Hooke's law: stress is proportional to strain inside the elastic limit. Steel is iron with a little carbon.","Golden Gate Bridge opened 1937. Panama Canal opened 1914. Burj Khalifa (Dubai) opened 2010."]],
+["Sports firsts and records",["Modern Olympics began in Athens in 1896. Pierre de Coubertin is the founder of the modern movement. The five rings stand for five continents.","Abhinav Bindra won India's first individual Olympic gold (10 m air rifle, Beijing 2008).","Neeraj Chopra won javelin gold at the Tokyo Olympics (held in 2021).","India won the 1983 Cricket World Cup under Kapil Dev.","Sachin Tendulkar is the only player with 100 international centuries.","A marathon is 42.195 km. Wimbledon is played on grass.","Argentina (captain Lionel Messi) won the 2022 FIFA World Cup in Qatar."]],
+["Math and art",["Ramanujan: 1729 is the smallest number that is the sum of two cubes in two different ways (1^3 + 12^3 and 9^3 + 10^3).","Brahmagupta (628 CE) gave rules for using zero in arithmetic. Aryabhata worked on place value and astronomy.","Andrew Wiles proved Fermat's Last Theorem (announced 1993, completed 1994-95).","Pi is about 3.14159. The golden ratio is about 1.618. 2 is the only even prime.","Leonardo da Vinci painted the Mona Lisa (Louvre, Paris). Van Gogh painted The Starry Night (1889). Picasso painted Guernica (1937).","Shah Jahan commissioned the Taj Mahal in Agra (completed around 1653).","Tip: InQuizitive asks about people behind inventions and why they matter, so learn who, what and when together."]]
+];
+const sp=document.getElementById('tests-tabs'),tz=document.getElementById('tz');
+TESTS.forEach((t,i)=>{const b=document.createElement('button');b.className='tab';b.textContent='Test '+(i+1)+': '+t.n;b.onclick=()=>{[...sp.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');mountQuiz(tz,t.q)};sp.appendChild(b)});
+sp.firstChild.classList.add('on');mountQuiz(tz,TESTS[0].q);
+mountQuiz(document.getElementById('qz'),PRACTICE);
+document.getElementById('notes').innerHTML=NOTES.map((n,i)=>'<details'+(i==0?' open':'')+'><summary>Note '+(i+1)+': '+n[0]+'</summary><ul>'+n[1].map(x=>'<li>'+x.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</li>').join('')+'</ul></details>').join('');
 
 const q=document.getElementById('q');q.addEventListener('input',()=>{const v=q.value.toLowerCase();
 document.querySelectorAll('.vids li').forEach(li=>li.style.display=li.textContent.toLowerCase().includes(v)?'':'none');
