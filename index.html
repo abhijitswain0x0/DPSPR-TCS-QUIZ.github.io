@@ -1,33 +1,41 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TCS InQuizitive Study Hub</title>
 <meta name="description" content="Study material for TCS InQuizitive: practice quiz and past round recordings, grouped by year.">
 <style>
-:root{--bg:#0f1220;--card:#181c30;--fg:#e8eaf3;--mut:#9aa0b8;--acc:#6ea8ff;--bd:#272c47}
-@media(prefers-color-scheme:light){:root{--bg:#f5f6fb;--card:#fff;--fg:#1a1d2e;--mut:#5a607a;--acc:#1f5fd6;--bd:#dde0ee}}
-*{box-sizing:border-box}body{margin:0;font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
-main{max-width:820px;margin:0 auto;padding:24px 16px 60px}
-h1{font-size:1.9rem;margin:.2em 0}h2{font-size:1.3rem;margin:0 0 .6em}
-.sub{color:var(--mut);margin:0 0 1.2em}
-section,.box{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin:16px 0}
+:root{--bg:#fff;--card:#fff;--fg:#333737;--mut:#747678;--acc:#1f66c1;--bd:#e3e4e6;--blk:#000}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 "Helvetica Neue",Arial,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#f4f4f5;color:var(--fg)}
+.top{background:#000;color:#fff;padding:0}.top .in{max-width:860px;margin:0 auto;padding:22px 18px 34px}
+.brand{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#9e9fa3;border-bottom:1px solid #333;padding-bottom:10px;margin-bottom:26px}
+h1{font-size:2.3rem;line-height:1.15;margin:0 0 .3em;font-weight:500;color:#fff}h2{font-size:1.35rem;margin:0 0 .6em;font-weight:500;color:#000}
+.top .sub{color:#c9cacd;margin:0}.sub{color:var(--mut);margin:0 0 1.2em}
+main{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+section,.box{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:20px 22px;margin:16px 0}
 a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
-nav{position:sticky;top:0;background:var(--bg);padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;z-index:2}
-nav a{border:1px solid var(--bd);border-radius:99px;padding:3px 12px;background:var(--card);font-size:.9rem}
-.count{font-size:.8rem;color:var(--mut);font-weight:400;margin-left:6px}
-.tag{font-size:.7rem;background:var(--acc);color:#fff;border-radius:99px;padding:2px 9px;margin-left:8px;vertical-align:middle}
-ul{padding-left:20px;margin:.4em 0}li{margin:.3em 0}.vids{columns:1}
+nav{position:sticky;top:0;background:#f4f4f5;padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;z-index:2}
+nav a{border:1px solid #c9cacd;border-radius:99px;padding:3px 14px;background:#fff;font-size:.9rem;color:#333737}
+.count{font-size:.8rem;color:var(--mut);font-weight:400;margin-left:8px}
+.tag{font-size:.7rem;background:#000;color:#fff;border-radius:99px;padding:2px 10px;margin-left:8px;vertical-align:middle;letter-spacing:.05em}
+ul{padding-left:20px;margin:.4em 0}li{margin:.3em 0}
 .note,.warn{color:var(--mut);font-size:.92rem}
-.warn{border-left:3px solid #e0a030;padding-left:12px}
-.btn{display:inline-block;background:var(--acc);color:#fff;padding:8px 16px;border-radius:8px;margin-top:6px}.btn:hover{text-decoration:none;opacity:.9}
-input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--fg);font-size:1rem;margin-top:8px}
+.warn{border-left:3px solid #000;padding:2px 0 2px 12px;background:#fff;margin:16px 0}
+.btn,.pill{display:inline-block;background:#747678;color:#fff;padding:10px 22px;border-radius:99px;border:0;font:inherit;font-weight:500;letter-spacing:.03em;cursor:pointer}
+.btn:hover,.pill:hover{background:#000;text-decoration:none}.pill.blue{background:var(--acc)}.pill:disabled{opacity:.4;cursor:default}
+input[type=search]{width:100%;padding:11px 16px;border-radius:99px;border:1px solid #c9cacd;background:#fff;color:var(--fg);font-size:1rem;margin-top:8px}
 footer{color:var(--mut);font-size:.85rem;margin-top:30px}
-</style></head><body><main>
-<h1>TCS InQuizitive Study Hub</h1>
-<p class="sub">Everything TCS publishes that you can study from, in one place. 120 recordings, a practice quiz, and the rules.</p>
+.qwrap .step{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.qwrap .qt{font-size:1.15rem;font-weight:500;color:#000;margin:0 0 14px}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid #c9cacd;border-radius:12px;padding:12px 16px;margin:8px 0;font:inherit;color:var(--fg);cursor:pointer}
+.opt:hover{border-color:#000}.opt.sel{border-color:#000;box-shadow:inset 0 0 0 1px #000}
+.opt.ok{border-color:#1b8a3a;background:#eaf6ee;box-shadow:inset 0 0 0 1px #1b8a3a}.opt.bad{border-color:#c0392b;background:#fbeceb;box-shadow:inset 0 0 0 1px #c0392b}
+.bar{height:4px;background:#e3e4e6;border-radius:4px;margin:0 0 18px}.bar i{display:block;height:4px;background:#000;border-radius:4px;width:0;transition:width .3s}
+.row{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.res{font-size:2.4rem;font-weight:500;color:#000}
+</style></head><body><header class="top"><div class="in"><div class="brand">TCS InQuizitive &middot; Study Hub</div><h1>TCS InQuizitive Study Hub</h1><p class="sub">Everything TCS publishes that you can study from, in one place. 120 recordings, a practice quiz, and the rules.</p></div></header>
+<main>
 <div class="warn"><b>Heads up:</b> there are no sample papers, answer-key PDFs, fixed syllabus or study pack on the TCS site. The PDFs there are press clippings. The best prep is the practice quiz and watching past rounds to see what gets asked.</div>
 <section id="quiz"><h2>1. Practice quiz</h2>
-<p>Five official multiple-choice questions on the TCS page. The page does not jump to the quiz on its own. After it opens, <b>scroll down to the section called "Get InQuizitive. Test your knowledge." (about 5 screens down)</b> and use "Check Answer". It is small, not a full mock test.</p>
-<p>Topics covered:</p><ul>
-<li>Joseph Lister and antiseptic surgery</li><li>Kamala Sohonie and her research institution</li><li>An engineer and monuments on both sides of the Atlantic</li><li>Aqueducts</li><li>The stone that stabilizes an arch</li></ul>
-<a class="btn" href="https://www.tcs.com/inquizitive" target="_blank" rel="noopener">Open the practice quiz</a></section>
+<p class="note">The same five questions as the official practice quiz on tcs.com/inquizitive, with answers taken from TCS's own page. It is small, not a full mock test.</p>
+<div class="qwrap" id="qz"></div>
+<p class="note" style="margin-top:16px">Prefer the original? <a href="https://www.tcs.com/inquizitive" target="_blank" rel="noopener">Open it on tcs.com</a> and scroll down about 5 screens to the section "Get InQuizitive. Test your knowledge." (the page cannot jump there on its own).</p></section>
 <section id="guide"><h2>2. What to study</h2>
 <p>TCS describes the quiz as technological developments across science, sports, engineering, mathematics and art. That is broad guidance, not a syllabus. Read widely, and watch the 2025 and 2024 finals first to see how questions are framed and how the buzzer rounds run.</p></section>
 <section id="rules"><h2>3. Rules and format</h2>
@@ -45,6 +53,24 @@ footer{color:var(--mut);font-size:.85rem;margin-top:30px}
 <footer>Unofficial study page made by students. All links point to the official TCS site and its channels. Inventory checked 11 October 2026. Some external videos may stop playing over time.</footer>
 </main>
 <script>
+const QS=[["Who is the English surgeon who promoted use of phenol as an antiseptic, and is known as the 'Father of Modern Surgery'?",["Louis Pasteur","Joseph Lister","Joseph Bell","Hippocrates"],1],
+["Kamala Sohonie held a satyagraha outside Sir CV Raman's office until he allowed her to become the first female researcher at ...?",["IISc","JNU","NCBS","IIT-Madras"],0],
+["What is the name of the legendary engineer who has designed two monuments on both sides of the Atlantic Ocean?",["Franco Levi","Isambard Kingdom Brunel","Maurice Koechlin","Gustave Eiffel"],3],
+["Which empire first built aqueducts to transport water for its citizens?",["Egyptian","Roman","Mayan","Ottoman"],1],
+["What is the name of the stone which is essential to the stability of the arch?",["Capstone","Cornerstone","Keystone","Groinstone"],2]];
+let qi=0,score=0,sel=-1,checked=false;const qz=document.getElementById('qz');
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function render(){
+ if(qi>=QS.length){qz.innerHTML='<div class="res">'+score+' / '+QS.length+'</div><p>'+(score==QS.length?'Perfect score.':'Watch the past finals to sharpen up.')+'</p><button class="pill" id="rs">Try again</button>';document.getElementById('rs').onclick=()=>{qi=0;score=0;sel=-1;checked=false;render()};return}
+ const q=QS[qi];
+ qz.innerHTML='<div class="bar"><i style="width:'+(qi/QS.length*100)+'%"></i></div><div class="step">Question '+String(qi+1).padStart(2,'0')+' of '+QS.length+'</div><p class="qt">'+esc(q[0])+'</p>'+q[1].map((o,i)=>'<button class="opt" data-i="'+i+'">'+esc(o)+'</button>').join('')+'<div class="row"><button class="pill" id="chk" disabled>Check Answer</button><button class="pill blue" id="nx" style="display:none">'+(qi==QS.length-1?'See score':'Next')+'</button><span id="fb"></span></div>';
+ const opts=[...qz.querySelectorAll('.opt')],chk=document.getElementById('chk'),nx=document.getElementById('nx'),fb=document.getElementById('fb');
+ opts.forEach(b=>b.onclick=()=>{if(checked)return;sel=+b.dataset.i;opts.forEach(x=>x.classList.remove('sel'));b.classList.add('sel');chk.disabled=false});
+ chk.onclick=()=>{checked=true;chk.style.display='none';nx.style.display='';opts.forEach((b,i)=>{if(i==q[2])b.classList.add('ok');else if(i==sel)b.classList.add('bad')});if(sel==q[2]){score++;fb.textContent='Correct'}else fb.textContent='Correct answer: '+q[1][q[2]]};
+ nx.onclick=()=>{qi++;sel=-1;checked=false;render()};
+}
+render();
+
 const q=document.getElementById('q');q.addEventListener('input',()=>{const v=q.value.toLowerCase();
 document.querySelectorAll('.vids li').forEach(li=>li.style.display=li.textContent.toLowerCase().includes(v)?'':'none');
 document.querySelectorAll('section[id^=y]').forEach(s=>{const any=[...s.querySelectorAll('li')].some(l=>l.style.display!=='none');s.style.display=any?'':'none'})});
