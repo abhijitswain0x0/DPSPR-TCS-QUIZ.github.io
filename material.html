@@ -108,26 +108,30 @@ dialog#vw{border:1px solid var(--bd);border-radius:14px;background:var(--card);c
 <p class="note">Private downloads. Enter the class password to see the file. <a href="./">Back to the study hub</a></p>
 <form id="uf" autocomplete="off"><div class="pw"><input id="pw" type="password" placeholder="Class password" aria-label="Class password" required autocomplete="current-password"><button class="pill" id="go" type="submit">Unlock</button></div></form>
 <p class="msg" id="msg" role="status"></p>
-<div id="out" hidden><div class="file"><b id="fn"></b><span id="fs"></span><br><button class="pill" id="dl" type="button">Download</button><p class="msg" id="dm" role="status"></p></div></div>
+<div id="out" hidden></div>
 </section></main>
 <script>
 const API='https://dpspr-upload.abhijitswain0x0.workers.dev';
-const $=id=>document.getElementById(id);let info=null,pwv='';
+const $=id=>document.getElementById(id);let pwv='';
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function show(items){const o=$('out');o.innerHTML='';items.forEach(it=>{const d=document.createElement('div');d.className='file';
+ d.innerHTML='<b>'+esc(it.name)+'</b><span>'+(it.size/1048576).toFixed(1)+' MB'+(it.note?' - '+esc(it.note):'')+'</span><br><button class="pill" type="button">Download</button><p class="msg" role="status"></p>';
+ d.querySelector('button').addEventListener('click',()=>dl(it,d.querySelector('button'),d.querySelector('.msg')));o.appendChild(d)});o.hidden=false}
 $('uf').addEventListener('submit',async e=>{e.preventDefault();const m=$('msg');m.className='msg';m.textContent='Checking...';$('go').disabled=true;$('out').hidden=true;
- try{const fd=new FormData();fd.append('password',$('pw').value);
+ try{const fd=new FormData();fd.append('password',$('pw').value);fd.append('list','1');
   const r=await fetch(API+'/video-info',{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
   if(r.status===401){m.className='msg err';m.textContent='Wrong password.'}
   else if(!r.ok||!j.ok){m.textContent=j.error==='no video yet'?'Nothing is uploaded here yet.':'Something went wrong. Try again.'}
-  else{m.textContent='';info=j;pwv=$('pw').value;$('fn').textContent=j.name;$('fs').textContent=(j.size/1048576).toFixed(1)+' MB'+(j.note?' - '+j.note:'');$('dm').textContent='';$('out').hidden=false}
+  else{m.textContent='';pwv=$('pw').value;show(j.items)}
  }catch(_){m.className='msg err';m.textContent='Could not reach the server. Check your connection.'}
  $('go').disabled=false});
-$('dl').addEventListener('click',async()=>{const b=$('dl'),m=$('dm');if(!info)return;b.disabled=true;m.className='msg';const parts=[];
+async function dl(info,b,m){b.disabled=true;m.className='msg';const parts=[];
  try{for(let i=0;i<info.chunks;i++){m.textContent='Downloading part '+(i+1)+' of '+info.chunks+'...';
-   const fd=new FormData();fd.append('password',pwv);fd.append('i',i);
+   const fd=new FormData();fd.append('password',pwv);fd.append('id',info.id);fd.append('i',i);
    const r=await fetch(API+'/video-part',{method:'POST',body:fd});if(!r.ok)throw 0;parts.push(await r.arrayBuffer())}
   const blob=new Blob(parts,{type:info.type||'video/mp4'});if(blob.size!==info.size)throw 0;
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=info.name;document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href),60000);m.textContent='Done. Check your downloads.'}
  catch(_){m.className='msg err';m.textContent='Download failed. Try again.'}
- b.disabled=false});
+ b.disabled=false}
 </script></body></html>
