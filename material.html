@@ -102,23 +102,32 @@ dialog#vw{border:1px solid var(--bd);border-radius:14px;background:var(--card);c
 #vb{flex:1;overflow:auto;padding:12px;-webkit-overflow-scrolling:touch;padding-bottom:calc(12px + env(safe-area-inset-bottom))}#vb img{max-width:100%;height:auto;display:block;margin:0 auto;border-radius:6px}#vb canvas.pg{display:block;margin:0 auto 10px;border:1px solid var(--bd);background:#fff;max-width:100%}#vb .vm{color:var(--mut);text-align:center;padding:30px 10px}#vb pre{white-space:pre-wrap;word-break:break-word;font:inherit;font-size:.92rem;margin:0}#vb .dx{max-width:760px;margin:0 auto;line-height:1.55;word-break:break-word}#vb .dx img{max-width:100%}#vb .dx table{border-collapse:collapse}#vb .dx td,#vb .dx th{border:1px solid var(--bd);padding:4px 8px}#vb .px{margin:0 auto}#vb .pptx-preview-wrapper{height:auto!important;overflow:visible!important;max-width:100%}#vb .px>div{margin-bottom:10px}#vb iframe.of{width:100%;height:100%;min-height:60vh;border:0;background:#fff;border-radius:6px}
 @media(max-width:560px){dialog#vw{width:100vw;height:100dvh;max-width:none;border-radius:0;border:0}}
 .docs.sc{overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--bd);border-radius:12px;padding:0 12px}.docs.sc .doc:first-child{border-top:0}
-.pw{display:flex;gap:8px;margin-top:12px}.pw input{padding:12px 14px;border-radius:12px;border:1px solid var(--bd);background:transparent;color:var(--fg);font:inherit;min-width:0}.msg{color:var(--mut);margin:10px 0 0;min-height:1.4em}.msg.err{color:#ff453a}.file{border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-top:16px}.file b{display:block;overflow-wrap:anywhere}.file span{color:var(--mut);font-size:.95rem}.file .pill{margin-top:12px;text-decoration:none}
+.pw{display:flex;gap:8px;margin-top:12px}.pw input{padding:12px 14px;border-radius:12px;border:1px solid var(--bd);background:transparent;color:var(--fg);font:inherit;min-width:0}.msg{color:var(--mut);margin:10px 0 0;min-height:1.4em}.msg.err{color:#ff453a}main section{padding:16px}.file{border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-top:16px}.file b{display:block;overflow-wrap:anywhere}.file span{color:var(--mut);font-size:.95rem}.file .pill{margin-top:12px;text-decoration:none}
 </style></head><body><header class="top"><div class="in"><div class="brand">TCS InQuizitive Study Hub <span>Unofficial, by students</span></div></div></header>
 <main><section><h1 style="font-size:1.5rem;margin:8px 0 4px">Material</h1>
 <p class="note">Private downloads. Enter the class password to see the file. <a href="./">Back to the study hub</a></p>
 <form id="uf" autocomplete="off"><div class="pw"><input id="pw" type="password" placeholder="Class password" aria-label="Class password" required autocomplete="current-password"><button class="pill" id="go" type="submit">Unlock</button></div></form>
 <p class="msg" id="msg" role="status"></p>
-<div id="out" hidden><div class="file"><b id="fn"></b><span id="fs"></span><br><form id="df" method="post" target="_self"><input type="hidden" name="password" id="dpw"><button class="pill" type="submit">Download</button></form></div></div>
+<div id="out" hidden><div class="file"><b id="fn"></b><span id="fs"></span><br><button class="pill" id="dl" type="button">Download</button><p class="msg" id="dm" role="status"></p></div></div>
 </section></main>
 <script>
 const API='https://dpspr-upload.abhijitswain0x0.workers.dev';
-const $=id=>document.getElementById(id);
+const $=id=>document.getElementById(id);let info=null,pwv='';
 $('uf').addEventListener('submit',async e=>{e.preventDefault();const m=$('msg');m.className='msg';m.textContent='Checking...';$('go').disabled=true;$('out').hidden=true;
  try{const fd=new FormData();fd.append('password',$('pw').value);
   const r=await fetch(API+'/video-info',{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
   if(r.status===401){m.className='msg err';m.textContent='Wrong password.'}
   else if(!r.ok||!j.ok){m.textContent=j.error==='no video yet'?'Nothing is uploaded here yet.':'Something went wrong. Try again.'}
-  else{m.textContent='';$('fn').textContent=j.name;$('fs').textContent=(j.size/1048576).toFixed(1)+' MB'+(j.note?' - '+j.note:'');$('df').action=API+'/video';$('dpw').value=$('pw').value;$('out').hidden=false}
+  else{m.textContent='';info=j;pwv=$('pw').value;$('fn').textContent=j.name;$('fs').textContent=(j.size/1048576).toFixed(1)+' MB'+(j.note?' - '+j.note:'');$('dm').textContent='';$('out').hidden=false}
  }catch(_){m.className='msg err';m.textContent='Could not reach the server. Check your connection.'}
  $('go').disabled=false});
+$('dl').addEventListener('click',async()=>{const b=$('dl'),m=$('dm');if(!info)return;b.disabled=true;m.className='msg';const parts=[];
+ try{for(let i=0;i<info.chunks;i++){m.textContent='Downloading part '+(i+1)+' of '+info.chunks+'...';
+   const fd=new FormData();fd.append('password',pwv);fd.append('i',i);
+   const r=await fetch(API+'/video-part',{method:'POST',body:fd});if(!r.ok)throw 0;parts.push(await r.arrayBuffer())}
+  const blob=new Blob(parts,{type:info.type||'video/mp4'});if(blob.size!==info.size)throw 0;
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=info.name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),60000);m.textContent='Done. Check your downloads.'}
+ catch(_){m.className='msg err';m.textContent='Download failed. Try again.'}
+ b.disabled=false});
 </script></body></html>
